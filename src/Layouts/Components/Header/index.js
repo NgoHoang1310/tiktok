@@ -15,16 +15,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { Link } from 'react-router-dom';
 
+import routeConfig from '~/Configs/routes';
 import styles from './Header.module.scss';
 import images from '~/Assets/Images';
-
 import Button from '~/Components/Button';
 import Menu from '~/Components/Popper/Menu';
 import BoxMessage, { Message } from '~/Components/Icons';
 import Image from '~/Components/Image';
-import Search from '~/Components/Layouts/Components/Search';
-import { useEffect } from 'react';
+import Search from '~/Layouts/Components/Search';
 
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
@@ -34,6 +34,42 @@ const MENU_ITEMS = [
         children: {
             title: 'Language',
             data: [
+                {
+                    code: 'en',
+                    title: 'English',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
+                {
+                    code: 'en',
+                    title: 'English',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
+                {
+                    code: 'en',
+                    title: 'English',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
+                {
+                    code: 'en',
+                    title: 'English',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
                 {
                     code: 'en',
                     title: 'English',
@@ -100,7 +136,9 @@ function Header() {
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div className={cx('logo')}>
-                    <img src={images.logo} alt="Tiktok" style={{ height: '40px' }}></img>
+                    <Link to={routeConfig.home}>
+                        <img src={images.logo} alt="Tiktok" style={{ height: '40px' }}></img>
+                    </Link>
                 </div>
 
                 <Search />

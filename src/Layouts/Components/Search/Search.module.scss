@@ -9,6 +9,7 @@
     border-radius: var(--search-border-radius);
     display: flex;
     position: relative;
+    border: 1px solid transparent;
 
     input {
         flex: 1;
@@ -16,6 +17,8 @@
         background-color: transparent;
         font-size: 1.6rem;
         caret-color: var(--primary-color);
+        font-family: var(--font-family);
+        font-weight: 400;
     }
 
     input:not(:placeholder-shown) ~ .search-btn {

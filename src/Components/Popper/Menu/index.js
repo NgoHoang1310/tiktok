@@ -34,26 +34,24 @@ function Menu({ items = [], children, onChange = DefaultFunction }) {
             delay={100}
             interactive
             placement="bottom-end"
+            hideOnClick={false}
             render={(attrs) => (
                 <div className={cx('menu-items')} tabIndex={-1} {...attrs}>
                     <PopperWrapper className={cx('menu-popper')}>
-                        {history.length > 1 && (
-                            <Header title={'Ngôn ngữ'} onBack={handleGoBack} />
-                        )}
-                        {current &&
-                            current.map((item, index) => {
-                                const isParent = !!item.children;
-
-                                return (
-                                    <MenuItem
-                                        key={index}
-                                        data={item}
-                                        onClick={() =>
-                                            handleToSubMenu(isParent, item)
-                                        }
-                                    />
-                                );
-                            })}
+                        {history.length > 1 && <Header title={'Ngôn ngữ'} onBack={handleGoBack} />}
+                        <div className={cx('menu-scrollable')}>
+                            {current &&
+                                current.map((item, index) => {
+                                    const isParent = !!item.children;
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            data={item}
+                                            onClick={() => handleToSubMenu(isParent, item)}
+                                        />
+                                    );
+                                })}
+                        </div>
                     </PopperWrapper>
                 </div>
             )}
