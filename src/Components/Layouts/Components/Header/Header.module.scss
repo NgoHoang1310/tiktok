@@ -1,0 +1,47 @@
+.wrapper {
+    --search-border-radius: 92px;
+    --search-button-width: 52px;
+    --actions-button-width: 110px;
+    --actions-button-height: 36px;
+    height: var(--default-layout-header-height);
+    box-shadow: 1px 1px #e0e0e0;
+}
+.inner {
+    height: 100%;
+    max-width: var(--default-layout-width);
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+}
+
+.setting {
+    margin-left: 16px;
+    padding: 0 4px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.actions-btn {
+    padding: 0 4px;
+    font-size: 1.2rem;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-left: 22px;
+    cursor: pointer;
+}
