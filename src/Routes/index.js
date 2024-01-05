@@ -1,10 +1,10 @@
-import config from '~/Configs';
-import Home from '~/Pages/Home';
-import Following from '~/Pages/Following';
-import Profile from '~/Pages/Profile';
-import Upload from '~/Pages/Upload';
-import Search from '~/Pages/Search';
-import { HeaderOnly } from '~/Layouts';
+import config from '~/configs';
+import Home from '~/pages/Home';
+import Following from '~/pages/Following';
+import Profile from '~/pages/Profile';
+import Upload from '~/pages/Upload';
+import Search from '~/pages/Search';
+import { HeaderOnly } from '~/layouts';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },

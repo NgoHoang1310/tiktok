@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import styles from '~/Components/Popper/Menu/Menu.module.scss';
+import styles from '~/components/Popper/Menu/Menu.module.scss';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -15,5 +16,10 @@ function Header({ title, onBack }) {
         </header>
     );
 }
+
+Header.propTypes = {
+    title: PropTypes.string.isRequired,
+    onBack: PropTypes.node.isRequired,
+};
 
 export default Header;

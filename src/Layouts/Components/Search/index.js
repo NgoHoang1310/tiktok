@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import HeadlessTippy from '@tippyjs/react/headless';
 
-import * as apiService from '~/Services/searchServices';
-import { Wrapper as PopperWrapper } from '~/Components/Popper';
-import AccountItem from '~/Components/AccountItem';
+import * as apiService from '~/services/searchServices';
+import { Wrapper as PopperWrapper } from '~/components/Popper';
+import AccountItem from '~/components/AccountItem';
 import { useRef, useState, useEffect } from 'react';
-import { useDebounce } from '~/Hooks';
+import { useDebounce } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
