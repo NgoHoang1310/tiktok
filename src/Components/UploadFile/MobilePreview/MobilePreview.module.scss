@@ -1,0 +1,126 @@
+.wrapper {
+    background-image: url('../../../../public/mobile-preview.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    color: var(--white-color);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    &:hover .control-video {
+        opacity: 1;
+    }
+}
+.video {
+    width: 100%;
+    transform: scaleY(1.22);
+}
+
+.video-mobile {
+    width: 92.5%;
+    height: 88%;
+    top: 2%;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+    overflow: hidden;
+}
+
+.overlay-preview {
+    position: absolute;
+    top: 0;
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper::after {
+    content: '';
+    display: block;
+    background-image: url('../../../../public/tab_bar_mobile.png');
+    width: 100%;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid var(--boder-blur-color);
+}
+
+.header-mobile {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 14px;
+    color: var(--white-color);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.sidebar-mobile {
+    font-size: 2rem;
+    position: absolute;
+    right: 4px;
+    bottom: 15%;
+    text-align: center;
+
+    div {
+        padding: 10px 0;
+    }
+}
+
+.avatar-mobile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+// .nav-mobile {
+//     background-image: url('../../../../public/tab_bar_mobile.png');
+//     width: 100%;
+//     height: 50px;
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     position: absolute;
+//     bottom: 8px;
+//     border-top: 1px solid var(--boder-blur-color);
+// }
+
+.control-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    border-radius: 40px;
+}
+
+.control-video {
+    cursor: pointer;
+    font-size: 1.3rem;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    bottom: 5%;
+    justify-content: space-evenly;
+    opacity: 0;
+    transition: opacity ease-in-out 0.125s;
+}
+
+.process-bar-container {
+    margin-top: 20px;
+    width: 90%;
+    height: 2px;
+    background-color: #4d4d4d;
+}
+
+.process-bar {
+    width: 0;
+    height: 100%;
+    background-color: var(--white-color);
+    // transition: width linear 0.2s;
+}

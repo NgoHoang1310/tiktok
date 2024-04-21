@@ -1,0 +1,243 @@
+.wrapper {
+    width: 1080px;
+    min-height: 722px;
+    height: 85%;
+    padding: 64px 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    background-color: white;
+}
+//select file
+.drag-area {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-width: 260px;
+    height: 100%;
+    border: 2px dashed rgba(22, 24, 35, 0.12);
+    border-radius: 8px;
+    transition: all ease-in 0.125s;
+
+    &:hover {
+        background-color: var(--nav-hover-color);
+    }
+}
+
+.drag-input {
+    display: none;
+}
+
+.upload-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    max-width: 300px;
+    width: 100%;
+    padding: 0 28px;
+    font-size: 1.4rem;
+    color: rgba(22, 24, 35, 0.75);
+    text-align: center;
+}
+
+.icon {
+    margin-bottom: 24px;
+    color: rgba(22, 24, 35, 0.34);
+}
+
+.text-main {
+    font-size: 1.8rem;
+    color: black;
+    font-weight: 700;
+}
+
+.text-sub {
+    margin-bottom: 24px;
+}
+
+.video-info {
+    p {
+        margin-bottom: 6px;
+    }
+}
+
+.select-btn {
+    // width: 100%;
+    margin-top: 32px;
+}
+
+//edit upload file
+
+.header {
+    margin-top: -36px;
+}
+.content {
+    display: flex;
+    height: 90%;
+    margin-top: 24px;
+}
+.select-file {
+    margin-top: 24px;
+    height: 460px;
+}
+
+.mobile-preview {
+    width: 242px;
+    height: 500px;
+    position: relative;
+}
+
+.mobile-video-info {
+    color: var(--white-color);
+    position: absolute;
+    bottom: 12.5%;
+    left: 14px;
+    font-size: 1rem;
+
+    span {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    div {
+        margin-top: 4px;
+        display: flex;
+
+        p {
+            margin-left: 8px;
+        }
+    }
+}
+
+.edit-info {
+    margin-left: 24px;
+    width: 75%;
+}
+
+.video-info {
+    margin-bottom: 24px;
+}
+
+.title {
+    display: block;
+    color: black;
+    margin-bottom: 4px;
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-right: 14px;
+}
+
+.video-thumb {
+}
+
+.thumb-timeline {
+    display: flex;
+    justify-content: center;
+    border: 1px solid var(--boder-blur-color);
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 150px;
+    position: relative;
+}
+
+.frame-image {
+    width: 85px;
+    height: 150px;
+    background-color: #ccc;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+
+.frame-chose {
+    cursor: grab;
+    position: absolute;
+    left: 0;
+    width: 94px;
+    height: 150px;
+    background-color: black;
+    background-color: transparent;
+    border: 6px solid rgb(255, 255, 255);
+    box-shadow: rgba(34, 90, 89, 0.2) 2px 4px 20px;
+    border-radius: 8px;
+    transform: scaleX(1.1) scaleY(1.15);
+
+    video {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+    }
+}
+
+.viewable-options {
+    width: 200px;
+    cursor: pointer;
+}
+
+.video-viewable {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    font-weight: 700;
+    border: 1px solid var(--boder-blur-color);
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.item {
+    padding: 10px 12px;
+    font-weight: 300;
+
+    &:hover {
+        background-color: var(--nav-hover-color);
+    }
+}
+
+.item.selected {
+    background-color: #f1f1f2;
+}
+
+.drop-icon {
+    transition: transform ease-in-out 0.3s;
+}
+
+.drop-icon.rotate {
+    transform: rotate(180deg);
+}
+
+.checkbox-options {
+    display: flex;
+}
+
+.checkbox-btn {
+    margin-right: 24px;
+
+    input {
+        accent-color: var(--primary-color);
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
+    span {
+        margin-left: 12px;
+    }
+}
+
+.video-other-setting {
+    display: flex;
+}
+
+.fetch-loading {
+    animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}

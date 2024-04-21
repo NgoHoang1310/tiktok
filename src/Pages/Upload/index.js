@@ -1,6 +1,19 @@
+import classNames from 'classnames/bind';
+import styles from './Upload.module.scss';
+
+import { UploadWrapper, SelectFile, EditUploadFile } from '~/components/UploadFile';
+import { useState } from 'react';
+
+const cx = classNames.bind(styles);
+
 function Upload() {
+    const [file, setFile] = useState();
     return (
-        <h1>Upload page</h1>
+        <div className={cx('wrapper')}>
+            <UploadWrapper>
+                {file ? <EditUploadFile data={file && file[0]} onFile={setFile} /> : <SelectFile onFile={setFile} />}
+            </UploadWrapper>
+        </div>
     );
 }
 

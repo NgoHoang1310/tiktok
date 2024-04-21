@@ -7,8 +7,11 @@
     width: 100%;
     margin: auto;
     display: flex;
+    height: auto;
+    margin-top: var(--default-layout-header-height);
 }
 
 .content {
-    width: 70%;
+    flex: 1;
+    margin-left: var(--side-bar-width);
 }

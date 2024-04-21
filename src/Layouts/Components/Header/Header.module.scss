@@ -5,6 +5,12 @@
     --actions-button-height: 36px;
     height: var(--default-layout-header-height);
     box-shadow: 1px 1px #e0e0e0;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white-color);
 }
 .inner {
     height: 100%;

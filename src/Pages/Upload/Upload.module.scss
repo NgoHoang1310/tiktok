@@ -1,0 +1,10 @@
+.wrapper {
+    max-width: var(--default-layout-width);
+    height: calc(100vh - var(--default-layout-header-height));
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: var(--default-layout-header-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,6 +1,18 @@
+import classNames from 'classnames/bind';
+import styles from './Following.module.scss';
+
+import PlayVideo from '~/components/PlayVideo';
+
+const cx = classNames.bind(styles);
+
 function Following() {
     return (
-        <h1>Following page</h1>
+        <div className={cx('wrapper')}>
+            <div className={cx('content')}>
+                {/* <PlayVideo /> */}
+                {/* <PlayVideo /> */}
+            </div>
+        </div>
     );
 }
 

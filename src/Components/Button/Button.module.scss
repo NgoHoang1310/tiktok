@@ -2,7 +2,9 @@
     min-width: 100px;
     display: inline-flex;
     font-size: 1.6rem;
-    padding: 9px 16px;
+    padding: 6px 16px;
+    justify-content: center;
+    text-align: center;
     border-radius: 4px;
     cursor: pointer;
 
@@ -33,16 +35,6 @@
     }
 }
 
-.simple {
-    border: 1px solid rgba(22, 24, 35, 0.12);
-    background-color: transparent;
-    cursor: pointer;
-
-    &:hover {
-        background-color: rgba(22, 24, 35, 0.03);
-    }
-}
-
 .outline {
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
@@ -53,9 +45,21 @@
     }
 }
 
+.simple {
+    border: 1px solid rgba(22, 24, 35, 0.12);
+    color: var(--black-color);
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+    }
+}
+
 .large {
     font-size: 1.8rem;
-    padding: 14px 61px;
+    width: 100%;
+    padding: 14px 69px;
     border-radius: 8px;
 }
 
@@ -68,4 +72,38 @@
     display: inline-block;
     width: 16px;
     text-align: center;
+}
+
+//toggle button
+.toggle-container {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: rgba(22, 24, 35, 0.12);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all ease-in-out 0.2s;
+}
+
+.toggle-container.toggle {
+    background-color: var(--primary-color);
+}
+
+.node {
+    position: absolute;
+    left: 3%;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 2px;
+    transition: left ease-in-out 0.2s;
+}
+
+.node.toggle {
+    left: 47%;
+}
+
+.loading {
 }
