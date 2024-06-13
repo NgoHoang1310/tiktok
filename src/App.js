@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publicRoutes } from './routes';
-import { DefaultLayout } from './layouts';
 import { Fragment, useEffect } from 'react';
+
+import { AuthGuard } from './hoc/Guard';
+import { privateRoutes, publicRoutes } from './routes';
+import { DefaultLayout } from './layouts';
 
 function App() {
     return (
@@ -15,7 +17,7 @@ function App() {
                         } else if (route.layout === null) {
                             Layout = Fragment;
                         }
-                        const Page = route.component;
+                        let Page = route.component;
                         return (
                             <Route
                                 key={index}
@@ -23,6 +25,28 @@ function App() {
                                 element={
                                     <Layout>
                                         <Page />
+                                    </Layout>
+                                }
+                            />
+                        );
+                    })}
+                    {privateRoutes.map((route, index) => {
+                        let Layout = DefaultLayout;
+                        if (route.layout) {
+                            Layout = route.layout;
+                        } else if (route.layout === null) {
+                            Layout = Fragment;
+                        }
+                        let Page = route.component;
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    <Layout>
+                                        <AuthGuard>
+                                            <Page />
+                                        </AuthGuard>
                                     </Layout>
                                 }
                             />

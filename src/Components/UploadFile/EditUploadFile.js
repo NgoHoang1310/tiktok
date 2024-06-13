@@ -127,7 +127,7 @@ function EditUploadFile({ data, onFile }) {
     const handleSubmit = async () => {
         setLoading(true);
         const res = await apiService.uploadVideo({
-            uid: currentUser.uid,
+            userId: currentUser._id,
             description: videoNote,
             viewable: viewable.value,
             allows,

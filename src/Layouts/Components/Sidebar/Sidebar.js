@@ -1,7 +1,7 @@
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames/bind';
-import { Placeholder } from 'rsuite';
-import 'rsuite/dist/rsuite.min.css';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 
 import config from '~/configs';
 import Menu, { MenuItem } from '~/layouts/Components/Sidebar/Menu';
@@ -62,7 +62,13 @@ function Sidebar() {
                 />
             </Menu>
             {initialize ? (
-                <Placeholder.Paragraph style={{ margin: '30px 0' }} graph="circle" />
+                <Box sx={{ width: '100%', display: 'flex', padding: '10px 0' }}>
+                    <Skeleton variant="circular" width={50} height={50} />
+                    <Box sx={{ flex: 1, margin: '0 8px' }}>
+                        <Skeleton animation="wave" />
+                        <Skeleton animation="wave" />
+                    </Box>
+                </Box>
             ) : (
                 <>{!isLogin ? <Login /> : <ListAccounts label="Các tài khoản đang follow" />}</>
             )}

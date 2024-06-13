@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from '~/components/Image/Image.module.scss';
@@ -15,13 +15,7 @@ function Image({ className, src, fallback = images.imagePlaceholder, ...props },
     };
 
     return (
-        <img
-            className={cx('wrapper', className)}
-            src={_fallback || src}
-            ref={ref}
-            {...props}
-            onError={() => handelFallback()}
-        ></img>
+        <img className={cx('wrapper', className)} src={_fallback} ref={ref} {...props} onError={handelFallback}></img>
     );
 }
 forwardRef.propTypes = {

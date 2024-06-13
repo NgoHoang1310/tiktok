@@ -9,7 +9,7 @@ function Video({ video, thumb }, ref) {
     }
     return (
         <div className={cx('wrapper')}>
-            <video ref={ref} className={cx('video')} src={video} type="video/mp4" />
+            <video poster={thumb} ref={ref} className={cx('video')} src={video} type="video/mp4" />
         </div>
     );
 }

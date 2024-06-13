@@ -3,7 +3,7 @@ import { SHOW_MODAL, INITIALIZE, USER_LOGIN, USER_LOGOUT } from './constants';
 const initial = {
     initialize: true,
     showModal: false,
-    isLogin: false,
+    isLogin: localStorage.getItem('isLogin') === 'true',
     currentUser: {},
 };
 

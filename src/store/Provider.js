@@ -1,38 +1,33 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useState } from 'react';
+
 import Context from './Context';
 import { initial } from './reducer';
-import { userLogOut, initialize, userLogin } from './actions';
+import { initialize, userLogin, userLogOut } from './actions';
 import reducer from './reducer';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '~/firebase/firebaseConfig';
+import * as apiServices from '~/services';
 function Provider({ children }) {
     const [state, dispatch] = useReducer(reducer, initial);
     useEffect(() => {
-        const unsubcribed = onAuthStateChanged(auth, async (user) => {
+        (async () => {
             try {
-                const localUser = JSON.parse(localStorage.getItem('persist:auth'));
-                if (user && localUser) {
-                    console.log('đã đăng nhập');
-                    dispatch(userLogin(localUser.currentUser));
-                } else {
-                    console.log('đã đăng xuất');
+                let token = JSON.parse(localStorage.getItem('token'));
+                if (!token?.accessToken) {
+                    dispatch(initialize(false));
                     dispatch(userLogOut());
-                    localStorage.clear();
+                    return;
+                }
+                const user = await apiServices.getMe();
+                if (user) {
+                    dispatch(userLogin(user));
+                    dispatch(initialize(false));
                 }
             } catch (error) {
-                console.log(error);
-                dispatch(userLogOut());
+                if (error?.statusCode === 500) {
+                    dispatch(initialize(false));
+                    dispatch(userLogOut());
+                }
             }
-        });
-
-        const timerId = setTimeout(() => {
-            dispatch(initialize(false));
-        }, 3000);
-
-        return () => {
-            clearTimeout(timerId);
-            unsubcribed();
-        };
+        })();
     }, []);
     return <Context.Provider value={[state, dispatch]}>{children}</Context.Provider>;
 }

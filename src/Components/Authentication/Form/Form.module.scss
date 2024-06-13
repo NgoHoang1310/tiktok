@@ -1,0 +1,35 @@
+.form-validation__header {
+    a {
+        font-size: 32px;
+    }
+    margin-bottom: 32px;
+}
+
+.form-validation__body {
+    .form-label {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        border: 1px solid rgba(22, 24, 35, 0.12);
+        font-size: 16px;
+        padding: 8px 12px;
+        margin-bottom: 4px;
+    }
+    .form-control:focus {
+        border-color: #1dbfaf;
+    }
+}
+
+.invalid {
+    input {
+        border-color: red !important;
+    }
+
+    span {
+        color: red !important;
+    }
+}

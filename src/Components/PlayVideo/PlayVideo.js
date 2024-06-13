@@ -17,7 +17,7 @@ function PlayVideo({ data }) {
 
     return (
         <div className={cx('wrapper')}>
-            <Image className={cx('avatar')} src={data?.userInfo.avatar} alt="avatar" />
+            <Image className={cx('avatar')} src={data?.userInfo?.avatar} alt="avatar" />
             <div className={cx('content')}>
                 <div className={cx('content-header')}>
                     <VideoInformation data={data} />

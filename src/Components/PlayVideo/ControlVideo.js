@@ -12,13 +12,65 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { LockScrollIcon, AutoScrollIcon } from '~/components/Icons';
 
+import { formatTime } from '~/utils/common';
+
 const cx = classNames.bind(styles);
 function ControlVideo({ videoRef }) {
+    const [userInteracted, setUserInteracted] = useState(false);
     const [play, setPlay] = useState(false);
     const [mute, setMute] = useState(false);
     const [autoScroll, setAutoScroll] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+
+    //xử lý phát video mỗi khi nằm trong viewport
+    useEffect(() => {
+        const handleIntersection = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    if (userInteracted) handlePlay();
+                } else {
+                    handlePause();
+                }
+            });
+        };
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.7,
+        });
+
+        if (videoRef.current) {
+            observer.observe(videoRef.current);
+        }
+
+        return () => {
+            if (videoRef.current) {
+                observer.unobserve(videoRef.current);
+            }
+            handlePause();
+        };
+    }, [userInteracted]);
+
+    //xử lí người dùng tương tác với trang wed
+    useEffect(() => {
+        const handleUserInteract = () => {
+            setUserInteracted(true);
+        };
+        window.addEventListener('click', handleUserInteract);
+
+        return () => {
+            window.removeEventListener('click', handleUserInteract);
+        };
+    }, []);
+
+    useEffect(() => {
+        handleOnPause();
+        handleGetDuration();
+        const interval = setInterval(handleTimeUpdate, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
 
     const handlePlay = () => {
         videoRef.current.play();
@@ -26,8 +78,10 @@ function ControlVideo({ videoRef }) {
     };
 
     const handlePause = () => {
-        videoRef.current.pause();
-        setPlay(false);
+        if (videoRef.current) {
+            videoRef.current.pause();
+            setPlay(false);
+        }
     };
     const handleMute = (e) => {
         e.stopPropagation();
@@ -40,18 +94,24 @@ function ControlVideo({ videoRef }) {
     };
 
     const handleOnPause = () => {
-        videoRef.current.onpause = () => {
-            handlePause();
-        };
+        if (videoRef.current) {
+            videoRef.current.onpause = () => {
+                handlePause();
+            };
+        }
     };
     const handleTimeUpdate = () => {
-        videoRef.current.ontimeupdate = function () {
-            setCurrentTime(this.currentTime);
-        };
+        if (videoRef.current) {
+            setCurrentTime(videoRef.current.currentTime);
+        }
     };
 
     const handleGetDuration = () => {
-        setDuration(videoRef.current.duration);
+        if (videoRef.current) {
+            videoRef.current.addEventListener('loadedmetadata', () => {
+                setDuration(videoRef.current.duration);
+            });
+        }
     };
 
     return (
@@ -77,12 +137,12 @@ function ControlVideo({ videoRef }) {
                             placement="bottom-start"
                             render={(attrs) => (
                                 <div className={cx('volume-control')} tabIndex={-1} {...attrs}>
-                                    <PopperWrapper className={cx('volume-control-wrapper')}>
-                                        {/* <div className={cx('volume-slider')}>
+                                    {/* <PopperWrapper className={cx('volume-control-wrapper')}>
+                                        <div className={cx('volume-slider')}>
                                             <div className={cx('volume-slider-rail')}></div>
-                                        </div> */}
-                                        {/* <Slider orientation="vertical" /> */}
-                                    </PopperWrapper>
+                                        </div>
+                                        <Slider orientation="vertical" />
+                                    </PopperWrapper> */}
                                 </div>
                             )}
                         >
@@ -102,23 +162,30 @@ function ControlVideo({ videoRef }) {
                         </HeadlessTippy>
                     </div>
                 </div>
-                <div className={cx('video-progress')}>
-                    {/* <div className={cx('progress-bar')}>
+                {duration >= 60 && (
+                    <div className={cx('video-progress')}>
+                        {/* <div className={cx('progress-bar')}>
                         <div className={cx('progress-thumb')}></div>
                     </div> */}
-                    <Slider
-                        color="error"
-                        size="small"
-                        sx={{
-                            color: 'white',
-                        }}
-                    />
-                    <div className={cx('progress-time')}>
-                        <span>00:00</span>
-                        <span>/</span>
-                        <span>00:00</span>
+                        <Slider
+                            aria-label="time-indicator"
+                            color="success"
+                            size="small"
+                            value={currentTime}
+                            min={0}
+                            step={1}
+                            max={duration}
+                            sx={{
+                                color: 'white',
+                            }}
+                        />
+                        <div className={cx('progress-time')}>
+                            <span>{formatTime(currentTime)}</span>
+                            <span>/</span>
+                            <span>{formatTime(duration)}</span>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

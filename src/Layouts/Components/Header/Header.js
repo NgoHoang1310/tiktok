@@ -20,6 +20,9 @@ import config from '~/configs';
 import { auth } from '~/firebase/firebaseConfig';
 import { actions } from '~/store';
 import { useStore } from '~/hooks';
+import * as apiServices from '~/services';
+import { useEffect } from 'react';
+
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -27,9 +30,15 @@ function Header() {
     const [state, dispatch] = useStore();
     const { showModal, isLogin, currentUser, initialize } = state;
 
-    const handleLogOut = (item) => {
+    const handleLogOut = async (item) => {
         if (item?.logOut) {
-            signOut(auth).then(() => {});
+            const token = JSON.parse(localStorage.getItem('token'));
+            const res = await apiServices.logout(token?.refreshToken);
+            if (res?.message === 'Log out successfully !') {
+                localStorage.removeItem('token');
+                dispatch(actions.userLogOut());
+                window.location.reload();
+            }
         }
     };
 
@@ -84,9 +93,9 @@ function Header() {
                             {isLogin ? (
                                 <Image
                                     className={cx('user-avatar')}
-                                    src={currentUser?.avatar}
+                                    src={currentUser.avatar}
                                     alt="Ngô Tuấn Hoàng"
-                                    // fallback="https://p16-sign-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-giso/9fd68e3a141b67f802b2e5ec0b115c90~c5_100x100.jpeg?lk3s=a5d48078&x-expires=1703955600&x-signature=i7N%2FQcJRcsD9zBX%2FNEjw%2BMdCHBs%3D"
+                                    // fallback="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
                                 />
                             ) : (
                                 <button className={cx('setting')}>
