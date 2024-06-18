@@ -83,28 +83,99 @@
     }
 }
 
-.volume-control-wrapper {
-    background-color: rgba(22, 24, 35, 0.34);
-    border-radius: 32px;
-    width: 36px;
-    height: 70px;
+.scroll-volume {
+    display: flex;
+    min-width: 55px;
 }
 
-.volume-slider {
-    width: 4px;
-    height: 100%;
+.scroll-volume__icon {
+    display: block;
+    margin-left: 8px;
     position: relative;
-    background-color: #4d4d4d;
-}
 
-.volume-slider-rail {
-    width: 4px;
-    height: 12%;
-    bottom: 0;
-    position: absolute;
-    background-color: white;
-}
+    .volume-slider__wrapper {
+        display: none;
+        position: absolute;
+        width: 24px;
+        height: 70px;
+        background-color: rgba(22, 24, 35, 0.34);
+        top: -72px;
+        left: 0;
+        padding: 8px 0;
+        border-radius: 32px;
+    }
+    &:hover .volume-slider__wrapper {
+        display: block;
+    }
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 24px;
+        height: 16px;
+        top: -12px;
+    }
 
+    .volume-slider__progress {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 60px; /* Chiều cao của thanh trượt */
+        height: 6px; /* Độ rộng của thanh trượt */
+        background: #ccc;
+        transform: rotate(-90deg) translateX(-41px) translateY(12px); /* Xoay thanh trượt 90 độ để quay dọc */
+        transform-origin: 0; /* Thiết lập gốc xoay ở giữa */
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-webkit-slider-runnable-track {
+        width: 6px;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-moz-range-track {
+        width: 6px;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-ms-track {
+        width: 6px;
+        height: 100%;
+        // background: white; /* Màu gradient xanh dương đến xanh lá cây */
+        border-radius: 5px;
+        border: none; /* Loại bỏ đường viền mặc định */
+        color: transparent; /* Ẩn các dấu tick */
+    }
+
+    /* Customizing the thumb */
+    .volume-slider__progress::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px;
+        height: 12px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+        margin-top: -3px; /* Để thumb nằm giữa track */
+    }
+
+    .volume-slider__progress::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+    }
+
+    .volume-slider__progress::-ms-thumb {
+        width: 15px;
+        height: 15px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+    }
+}
 .video-progress {
     font-size: 1rem;
     display: flex;

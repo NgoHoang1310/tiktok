@@ -3,6 +3,7 @@ import styles from './Form.module.scss';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 import Button from '~/components/Button';
 import { Validator } from '~/utils/validation';
@@ -22,22 +23,44 @@ function Form({ type, onLogin }) {
         if (password !== passwordConfirm) return;
         setLoading(true);
         const res = await apiServices.register({ fullName, nickName, email, password });
-        if (res?.message === 'CREATED') {
-            setLoading(false);
-            onLogin(true);
+        switch (res?.status) {
+            case 201: {
+                toast('Đăng kí tài khoản thành công !');
+                setLoading(false);
+                onLogin(true);
+                break;
+            }
+            case 409: {
+                toast('Email đã được sử dụng !');
+                setLoading(false);
+                break;
+            }
         }
     };
 
     const handleLogin = async () => {
         if (password !== passwordConfirm) return;
         setLoading(true);
-        // console.log('login');
         const res = await apiServices.login({ email, password });
-        if (res?.message == 'OK') {
-            localStorage.setItem('token', JSON.stringify(res.data));
-            localStorage.setItem('isLogin', 'true');
-            setLoading(false);
-            window.location.reload();
+        switch (res?.status) {
+            case 200: {
+                localStorage.setItem('token', JSON.stringify(res.data));
+                localStorage.setItem('isLogin', 'true');
+                toast('Đăng nhập thành công !');
+                setLoading(false);
+                window.location.reload();
+                break;
+            }
+            case 404: {
+                setLoading(false);
+                toast('Tài khoản không tồn tại !');
+                break;
+            }
+            case 406: {
+                setLoading(false);
+                toast('Mật khẩu không chính xác !');
+                break;
+            }
         }
     };
 

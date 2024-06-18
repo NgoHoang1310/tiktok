@@ -17,7 +17,7 @@ export const get = async (url, options = {}) => {
             'Content-Type': 'application/json',
         },
     });
-    return res.data;
+    return { ...res.data, status: res.status };
 };
 
 export const post = async (url, options = {}, configs = { contentType: 'application/json' }) => {
@@ -26,7 +26,7 @@ export const post = async (url, options = {}, configs = { contentType: 'applicat
             'Content-Type': `${configs?.contentType}`,
         },
     });
-    return res.data;
+    return { ...res.data, status: res.status };
 };
 
 export const destroy = async (url, options = {}, configs = { contentType: 'application/json' }) => {
@@ -36,7 +36,7 @@ export const destroy = async (url, options = {}, configs = { contentType: 'appli
             'Content-Type': `${configs?.contentType}`,
         },
     });
-    return res.data;
+    return { ...res.data, status: res.status };
 };
 
 request.interceptors.request.use(

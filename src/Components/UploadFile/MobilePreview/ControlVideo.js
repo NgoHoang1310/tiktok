@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faVolumeUp, faVolumeMute, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useImperativeHandle, useState } from 'react';
 
+import { formatTime } from '~/utils/common';
+
 const cx = classNames.bind(styles);
 
 function ControlVideo({ videoRef }) {
@@ -71,9 +73,9 @@ function ControlVideo({ videoRef }) {
                     )}
                 </div>
                 <div className={cx('time')}>
-                    <span>00:00:{Math.floor(currentTime)}</span>
+                    <span>{formatTime(currentTime)}</span>
                     <span>/</span>
-                    <span>00:00:{Math.floor(duration)}</span>
+                    <span>{formatTime(duration)}</span>
                 </div>
                 <div className={cx('volume')} onClick={handleMute}>
                     {mute ? <FontAwesomeIcon icon={faVolumeMute} /> : <FontAwesomeIcon icon={faVolumeUp} />}

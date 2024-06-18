@@ -30,7 +30,7 @@ const register = async (payload) => {
         const res = await request.post('/auth/register', payload);
         return res;
     } catch (error) {
-        console.log(error);
+        return error?.response;
     }
 };
 
@@ -39,7 +39,7 @@ const login = async (payload) => {
         const res = await request.post('/auth/login', payload);
         return res;
     } catch (error) {
-        console.log(error);
+        return error?.response;
     }
 };
 
