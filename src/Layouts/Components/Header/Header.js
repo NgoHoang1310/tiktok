@@ -5,8 +5,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { signOut } from 'firebase/auth';
-
 import styles from './Header.module.scss';
 import images from '~/assets/Images';
 import Button from '~/components/Button/Button';
@@ -17,11 +15,9 @@ import Search from '~/layouts/Components/Search';
 import AvatarHolder from '~/components/PlaceHolder';
 
 import config from '~/configs';
-import { auth } from '~/firebase/firebaseConfig';
 import { actions } from '~/store';
 import { useStore } from '~/hooks';
 import * as apiServices from '~/services';
-import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +32,7 @@ function Header() {
             const res = await apiServices.logout(token?.refreshToken);
             if (res?.message === 'Log out successfully !') {
                 localStorage.removeItem('token');
+                localStorage.removeItem('isLogin');
                 dispatch(actions.userLogOut());
                 window.location.reload();
             }

@@ -10,9 +10,15 @@ function Upload() {
     const [file, setFile] = useState();
     return (
         <div className={cx('wrapper')}>
-            <UploadWrapper>
-                {file ? <EditUploadFile data={file && file[0]} onFile={setFile} /> : <SelectFile onFile={setFile} />}
-            </UploadWrapper>
+            <div className={cx('inner')}>
+                <UploadWrapper>
+                    {file ? (
+                        <EditUploadFile data={file && file[0]} onFile={setFile} />
+                    ) : (
+                        <SelectFile onFile={setFile} />
+                    )}
+                </UploadWrapper>
+            </div>
         </div>
     );
 }

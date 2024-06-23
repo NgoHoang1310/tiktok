@@ -1,10 +1,17 @@
 .wrapper {
     max-width: var(--default-layout-width);
-    height: calc(100vh - var(--default-layout-header-height));
+    min-height: 600px;
+    height: 100vh;
     margin-right: auto;
     margin-left: auto;
     margin-top: var(--default-layout-header-height);
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
+}
+
+.inner {
+    height: 100%;
+    padding-top: 24px;
 }

@@ -1,8 +1,17 @@
 import * as request from '~/utils';
 
-const getListVideos = async (page = 1, limit = 8) => {
+const getListVideos = async (limit = 5) => {
     try {
-        const res = await request.get(`/videos?page=${page}&limit=${limit}`);
+        const res = await request.get(`/videos?limit=${limit}`);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getFollowingVideos = async (userId, limit = 5) => {
+    try {
+        const res = await request.get(`/videos/following/${userId}/${limit}`);
         return res.data;
     } catch (error) {
         throw error;
@@ -18,4 +27,4 @@ const uploadVideo = async (payload) => {
     }
 };
 
-export { getListVideos, uploadVideo };
+export { getListVideos, getFollowingVideos, uploadVideo };

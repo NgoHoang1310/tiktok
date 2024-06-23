@@ -11,6 +11,7 @@
         "@fortawesome/react-fontawesome": "^0.2.0",
         "@mui/material": "^5.15.6",
         "@mui/styled-engine-sc": "^6.0.0-alpha.11",
+        "@rajesh896/video-thumbnails-generator": "^2.3.9",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
@@ -32,7 +33,6 @@
         "reactstrap": "^9.2.1",
         "rsuite": "^5.50.0",
         "styled-components": "^6.1.8",
-        "video-frames": "^1.0.18",
         "web-vitals": "^2.1.4"
     },
     "scripts": {

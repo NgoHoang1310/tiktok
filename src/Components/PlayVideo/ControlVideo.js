@@ -13,25 +13,27 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { LockScrollIcon, AutoScrollIcon } from '~/components/Icons';
 
 import { formatTime } from '~/utils/common';
+import { useStore } from '~/hooks';
+import { actions } from '~/store';
+import { setVolume } from '~/store/actions';
 
 const cx = classNames.bind(styles);
 function ControlVideo({ videoRef }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
-    const [volume, setVolume] = useState(50);
-    const [userInteracted, setUserInteracted] = useState(false);
+    const [state, dispatch] = useStore();
+    const { isAutoScroll, isMute, volume } = state;
     const [play, setPlay] = useState(false);
-    const [mute, setMute] = useState(false);
-    const [autoScroll, setAutoScroll] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [videoReady, setVideoReady] = useState(false);
 
     //xử lý phát video mỗi khi nằm trong viewport
     useEffect(() => {
         const handleIntersection = (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    if (userInteracted) handlePlay();
+                    handlePlay();
                 } else {
                     handlePause();
                 }
@@ -51,39 +53,31 @@ function ControlVideo({ videoRef }) {
             }
             handlePause();
         };
-    }, [userInteracted]);
+    }, [videoReady]);
 
-    //xử lí người dùng tương tác với trang wed
+    //xử lý set độ dài của video
     useEffect(() => {
-        const handleUserInteract = () => {
-            setUserInteracted(true);
-        };
-        window.addEventListener('click', handleUserInteract);
-
-        return () => {
-            window.removeEventListener('click', handleUserInteract);
-        };
-    }, []);
-
-    useEffect(() => {
-        const handleGetDuration = () => {
-            if (videoRef.current) {
-                videoRef.current.addEventListener('loadedmetadata', () => {
-                    setDuration(videoRef.current.duration);
-                });
-            }
+        const handleSetDuration = () => {
+            setDuration(videoRef.current?.duration);
         };
 
-        handleGetDuration();
-        handleOnPause();
+        videoRef.current.addEventListener('loadedmetadata', handleSetDuration);
         const interval = setInterval(handleTimeUpdate, 1000);
 
         return () => {
             clearInterval(interval);
-            videoRef.current.removeEventListener('loadedmetadata', handleGetDuration);
+            videoRef.current?.removeEventListener('loadedmetadata', handleSetDuration);
+        };
+    }, []);
+    //xử lý khi video kết thúc
+    useEffect(() => {
+        videoRef.current.addEventListener('ended', handlePause);
+        return () => {
+            videoRef.current?.removeEventListener('ended', handlePause);
         };
     }, []);
 
+    //xử lí nút âm lượng
     useEffect(() => {
         const slider = volumeRef.current;
         const video = videoRef.current;
@@ -92,35 +86,40 @@ function ControlVideo({ videoRef }) {
         video.volume = value / 100;
     }, [volume]);
 
+    //xử lí chặn phát video khi video chưa sẵn sàng để phát
+    useEffect(() => {
+        const handleVideoCanplay = () => {
+            setVideoReady(true);
+        };
+        videoRef.current.addEventListener('canplay', handleVideoCanplay);
+
+        return () => {
+            videoRef.current?.removeEventListener('canplay', handleVideoCanplay);
+        };
+    }, []);
+
     const handlePlay = () => {
-        videoRef.current.play();
-        setPlay(true);
+        if (videoReady) {
+            videoRef.current?.play();
+            setPlay(true);
+        }
     };
 
     const handlePause = () => {
-        if (videoRef.current) {
-            videoRef.current.pause();
-            setPlay(false);
-        }
+        videoRef.current?.pause();
+        setPlay(false);
     };
     const handleMute = (e) => {
         e.stopPropagation();
-        videoRef.current.muted = !mute;
-        setMute(!mute);
-        !mute ? setVolume(0) : setVolume(preVolume.current);
+        videoRef.current.muted = !isMute;
+        dispatch(actions.mute(!isMute));
+        !isMute ? dispatch(actions.setVolume(0)) : dispatch(actions.setVolume(preVolume.current));
     };
 
     const handleAutoScroll = () => {
-        setAutoScroll(!autoScroll);
+        dispatch(actions.autoScroll(!isAutoScroll));
     };
 
-    const handleOnPause = () => {
-        if (videoRef.current) {
-            videoRef.current.onpause = () => {
-                handlePause();
-            };
-        }
-    };
     const handleTimeUpdate = () => {
         if (videoRef.current) {
             setCurrentTime(videoRef.current.currentTime);
@@ -128,23 +127,22 @@ function ControlVideo({ videoRef }) {
     };
 
     const handleSeeking = (e) => {
-        if (videoRef.current) {
-            videoRef.current.currentTime = e.target.value;
-            setCurrentTime(e.target.value);
-        }
+        videoRef.current.currentTime = e.target.value;
+        setCurrentTime(e.target.value);
     };
 
     const handleVolumeChange = (event) => {
         preVolume.current = event.target.value;
-        setVolume(event.target.value);
+        dispatch(setVolume(event.target.value));
         if (event.target.value == 0) {
             videoRef.current.muted = true;
-            setMute(true);
+            dispatch(actions.mute(true));
         } else {
             videoRef.current.muted = false;
-            setMute(false);
+            dispatch(actions.mute(false));
         }
     };
+
     return (
         <div className={cx('control-overlay')}>
             <div className={cx('video-action')}>
@@ -161,9 +159,9 @@ function ControlVideo({ videoRef }) {
                         )}
                     </div>
                     <div className={cx('scroll-volume')}>
-                        <div onClick={handleAutoScroll}>{autoScroll ? <AutoScrollIcon /> : <LockScrollIcon />}</div>
+                        <div onClick={handleAutoScroll}>{isAutoScroll ? <AutoScrollIcon /> : <LockScrollIcon />}</div>
                         <div className={cx('scroll-volume__icon')}>
-                            {mute || volume == 0 ? (
+                            {isMute || volume == 0 ? (
                                 <FontAwesomeIcon onClick={handleMute} icon={faVolumeMute} />
                             ) : (
                                 <FontAwesomeIcon onClick={handleMute} icon={faVolumeUp} />

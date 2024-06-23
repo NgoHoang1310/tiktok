@@ -11,7 +11,6 @@ const cx = classNames.bind(styles);
 function Interaction({ data }) {
     const [heartActive, setHeartActive] = useState(false);
     const [bookMarkActive, setBookMarkActive] = useState(false);
-    console.log('interaction');
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('list')}>

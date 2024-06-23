@@ -14,13 +14,12 @@ const cx = classNames.bind(styles);
 const DefaultFunction = () => {};
 
 function Menu({ items = [], children, onChange = DefaultFunction }) {
-    useEffect(() => {
-        setHistory([{ data: items }]);
-    }, [items]);
     const [history, setHistory] = useState([{ data: items }]);
 
     const current = history[history.length - 1].data;
-
+    useEffect(() => {
+        setHistory([{ data: items }]);
+    }, [items]);
     const handleToSubMenu = (condition, subMenu) => {
         if (condition) {
             setHistory((prev) => [...prev, subMenu.children]);
@@ -44,17 +43,12 @@ function Menu({ items = [], children, onChange = DefaultFunction }) {
                     <PopperWrapper className={cx('menu-popper')}>
                         {history.length > 1 && <Header title={'Ngôn ngữ'} onBack={handleGoBack} />}
                         <div className={cx('menu-scrollable')}>
-                            {current &&
-                                current.map((item, index) => {
-                                    const isParent = !!item.children;
-                                    return (
-                                        <MenuItem
-                                            key={index}
-                                            data={item}
-                                            onClick={() => handleToSubMenu(isParent, item)}
-                                        />
-                                    );
-                                })}
+                            {current?.map((item, index) => {
+                                const isParent = !!item.children;
+                                return (
+                                    <MenuItem key={index} data={item} onClick={() => handleToSubMenu(isParent, item)} />
+                                );
+                            })}
                         </div>
                     </PopperWrapper>
                 </div>

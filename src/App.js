@@ -6,52 +6,34 @@ import { privateRoutes, publicRoutes } from './routes';
 import { DefaultLayout } from './layouts';
 
 function App() {
+    function renderRoute(route, index, isPrivate = false) {
+        let Layout = route.layout ?? (route.layout === null ? Fragment : DefaultLayout);
+        let Page = route.component;
+        return (
+            <Route
+                key={index}
+                path={route.path}
+                element={
+                    <Layout>
+                        {isPrivate ? (
+                            <AuthGuard>
+                                <Page />
+                            </AuthGuard>
+                        ) : (
+                            <Page />
+                        )}
+                    </Layout>
+                }
+            />
+        );
+    }
+
     return (
         <Router>
             <div className="App">
                 <Routes>
-                    {publicRoutes.map((route, index) => {
-                        let Layout = DefaultLayout;
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
-                        let Page = route.component;
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
-                    {privateRoutes.map((route, index) => {
-                        let Layout = DefaultLayout;
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
-                        let Page = route.component;
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <AuthGuard>
-                                            <Page />
-                                        </AuthGuard>
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
+                    {publicRoutes.map((route, index) => renderRoute(route, index))}
+                    {privateRoutes.map((route, index) => renderRoute(route, index, true))}
                 </Routes>
             </div>
         </Router>

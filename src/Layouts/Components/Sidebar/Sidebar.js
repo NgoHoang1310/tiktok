@@ -41,6 +41,7 @@ function Sidebar() {
                     icon={<UserFollowerIcon />}
                     activeIcon={<UserFollowerActiveIcon />}
                     to={config.routes.following}
+                    requireAuth
                 />
                 <MenuItem
                     title="Bạn bè"

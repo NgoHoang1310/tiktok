@@ -1,8 +1,7 @@
 .wrapper {
     width: 1080px;
-    min-height: 722px;
-    height: 85%;
-    padding: 64px 50px;
+    height: 100%;
+    padding: 52px 50px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     background-color: white;
@@ -128,9 +127,6 @@
     font-weight: 700;
     font-size: 1.6rem;
     margin-right: 14px;
-}
-
-.video-thumb {
 }
 
 .thumb-timeline {

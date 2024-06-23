@@ -4,7 +4,7 @@ import styles from './UploadFile.module.scss';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faMusic, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import videoframesMin from 'video-frames';
+import { generateVideoThumbnails } from '@rajesh896/video-thumbnails-generator';
 
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { SelectFile } from './SelectFile';
@@ -17,6 +17,7 @@ import { useStore } from '~/hooks';
 import * as apiService from '~/services';
 
 const cx = classNames.bind(styles);
+const MAX_THUMBNAIL = 8;
 
 const VIEWABLE_LIST = [
     {
@@ -59,58 +60,58 @@ function EditUploadFile({ data, onFile }) {
     const [videoThumb, setVideoThumb] = useState();
 
     useEffect(() => {
-        videoframesMin({
-            url: URL.createObjectURL(data),
-            count: 8,
-        }).then((frames) => setFrames(frames));
+        generateVideoThumbnails(data, MAX_THUMBNAIL).then((frames) => {
+            setFrames(frames);
+            setVideoThumb(frames[0]);
+        });
     }, []);
 
     useEffect(() => {
-        handleChooseFrame();
-    }, [frames]);
+        const minPos = 0;
+        const maxPos = 599;
+        let pos1 = 0;
+        let pos2 = 0;
+        let videoProgress = 0;
 
-    const handleCancel = () => {
-        onFile('');
-    };
-
-    const handleChooseFrame = () => {
-        const minPos = 0,
-            maxPos = 599;
-        let pos1 = 0,
-            pos2 = 0,
-            videoProgress = 0;
-        frameChooseRef.current.onmousedown = dragMouseDown;
-        function dragMouseDown(e) {
-            e = e || window.event;
+        const dragMouseDown = (e) => {
             e.preventDefault();
-            // get the mouse cursor position at startup:
             pos2 = e.clientX;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-        }
-        function elementDrag(e) {
-            e = e || window.event;
+            document.addEventListener('mouseup', closeDragElement);
+            document.addEventListener('mousemove', elementDrag);
+        };
+
+        const elementDrag = (e) => {
             e.preventDefault();
-            // calculate the new cursor position:
             pos1 = pos2 - e.clientX;
             pos2 = e.clientX;
-            // set the element's new position:
             videoProgress = ((frameChooseRef.current.offsetLeft - pos1) / 600) * frameVideoRef.current.duration;
+
             if (
                 frameChooseRef.current.offsetLeft - pos1 <= minPos ||
                 frameChooseRef.current.offsetLeft - pos1 > maxPos
             ) {
                 return;
             }
+
             frameChooseRef.current.style.left = frameChooseRef.current.offsetLeft - pos1 + 'px';
             frameVideoRef.current.currentTime = videoProgress;
-        }
-        function closeDragElement() {
-            setVideoThumb(frames[Math.floor(videoProgress)]?.image);
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
+        };
+
+        const closeDragElement = () => {
+            let thumbIndex = Math.floor((videoProgress * 8) / frameVideoRef.current.duration);
+            setVideoThumb(frames[thumbIndex]);
+            document.removeEventListener('mouseup', closeDragElement);
+            document.removeEventListener('mousemove', elementDrag);
+        };
+
+        frameChooseRef.current.addEventListener('mousedown', dragMouseDown);
+        return () => {
+            frameChooseRef.current?.removeEventListener('mousedown', dragMouseDown);
+        };
+    }, [frames]);
+
+    const handleCancel = () => {
+        onFile('');
     };
 
     const handleCheck = (value) => {
@@ -132,7 +133,7 @@ function EditUploadFile({ data, onFile }) {
             viewable: viewable.value,
             allows,
             filePath: data,
-            thumbPath: videoThumb,
+            thumbPath: videoThumb?.split(',')[1],
         });
         if (res) {
             setLoading(false);
@@ -177,7 +178,7 @@ function EditUploadFile({ data, onFile }) {
                                         <div
                                             key={index}
                                             className={cx('frame-image')}
-                                            style={{ backgroundImage: `url(${frame.image})` }}
+                                            style={{ backgroundImage: `url(${frame})` }}
                                         ></div>
                                     ))}
                                 <div ref={frameChooseRef} className={cx('frame-chose')}>
