@@ -103,4 +103,26 @@ body {
     .firebase-emulator-warning {
         display: none;
     }
+
+    .break-bar {
+        height: 1px;
+        width: 100%;
+        background-color: var(--boder-blur-color);
+        margin: 4px 0;
+    }
+
+    .hashtags {
+        color: rgb(43, 93, 185);
+        font-weight: 600;
+        margin-right: 4px;
+    }
+
+    .line {
+        position: absolute;
+        width: 100px;
+        height: 2px;
+        bottom: 0;
+        background-color: black;
+        transition: all 0.2s ease;
+    }
 }

@@ -7,14 +7,15 @@ import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
-function ListAccounts({ label }) {
+function ListAccounts({ label, data = [] }) {
     return (
         <div className={cx('wrapper')}>
             <label className={cx('list-label')}>{label}</label>
-
-            <AccountItem />
-            <AccountItem />
-            <AccountItem />
+            {data.length > 0 ? (
+                data.map((account, index) => <AccountItem key={index} data={account?.userInfo} />)
+            ) : (
+                <div>Chưa có tài khoản follow</div>
+            )}
             <p className={cx('more-btn')}>Xem thêm</p>
         </div>
     );

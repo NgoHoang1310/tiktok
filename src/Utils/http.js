@@ -1,6 +1,9 @@
 import axios from 'axios';
 import * as apiServices from '~/services';
 
+let isRefreshing = false;
+let failedQueue = [];
+
 const request = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
 });
@@ -29,6 +32,15 @@ export const post = async (url, options = {}, configs = { contentType: 'applicat
     return { ...res.data, status: res.status };
 };
 
+export const patch = async (url, options = {}, configs = { contentType: 'application/json' }) => {
+    const res = await request.patch(url, options, {
+        headers: {
+            'Content-Type': `${configs?.contentType}`,
+        },
+    });
+    return { ...res.data, status: res.status };
+};
+
 export const destroy = async (url, options = {}, configs = { contentType: 'application/json' }) => {
     const res = await request.delete(url, {
         ...options,
@@ -37,6 +49,44 @@ export const destroy = async (url, options = {}, configs = { contentType: 'appli
         },
     });
     return { ...res.data, status: res.status };
+};
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve();
+        }
+    });
+
+    failedQueue = [];
+};
+
+const refreshToken = async (payload) => {
+    try {
+        const res = await request.post('/auth/refresh-token', payload);
+        localStorage.setItem('token', JSON.stringify(res.data.data));
+        processQueue(null);
+        return res.data.data;
+    } catch (error) {
+        processQueue(error);
+        throw error;
+    }
+};
+
+const getNewToken = async () => {
+    if (!isRefreshing) {
+        isRefreshing = true;
+        let newToken = await refreshToken({
+            refreshToken: JSON.parse(localStorage.getItem('token'))?.refreshToken,
+        });
+        isRefreshing = false;
+        return newToken;
+    }
+    return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+    });
 };
 
 request.interceptors.request.use(
@@ -59,22 +109,23 @@ request.interceptors.response.use(
     },
     async function (error) {
         const config = error?.config;
-        try {
-            if (error?.response?.data?.message === 'jwt expired' && !config?._retry) {
-                config._retry = true;
-                let newToken = await apiServices.refreshToken({
-                    refreshToken: JSON.parse(localStorage.getItem('token'))?.refreshToken,
-                });
-                localStorage.setItem('token', JSON.stringify(newToken));
+        if (error?.response?.status === 401 && !config?._retry) {
+            config._retry = true;
+            try {
+                let newToken = await getNewToken();
                 config.headers = {
                     ...config.headers,
                     Authorization: `Bearer ${newToken?.accessToken}`,
                 };
                 return request(config);
+            } catch (error) {
+                return Promise.reject(error);
             }
-        } catch (error) {
-            return Promise.reject(error?.response?.data);
         }
+        if (error?.response?.status === 403) {
+            localStorage.clear();
+        }
+
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
         return Promise.reject(error);

@@ -1,0 +1,44 @@
+.wrapper {
+    width: 100%;
+}
+
+.video-info {
+    font-size: 1.4rem;
+    margin-right: 12px;
+}
+.account-info {
+    display: flex;
+    align-items: center;
+}
+.nickname {
+    font-size: 1.8rem;
+    line-height: 24px;
+    color: black;
+
+    span {
+        margin-left: 4px;
+        color: var(--green-check-color);
+    }
+}
+.name {
+    font-size: 1.4rem;
+    margin-left: 8px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.date {
+    margin-left: 8px;
+    line-height: 24px;
+}
+.title {
+    font-size: 1.6rem;
+
+    margin-bottom: 4px;
+}
+
+.music {
+    span {
+        margin-right: 8px;
+    }
+}

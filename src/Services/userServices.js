@@ -1,9 +1,27 @@
 import * as request from '~/utils';
 
-const getFollowings = async (id) => {
+const getFollowingUsers = async (id) => {
     try {
         const res = await request.get(`/users/${id}/following`);
         return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getUserProfile = async (userName) => {
+    try {
+        const res = await request.get(`/users/${userName}/profile`);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updateProfile = async (id, payload) => {
+    try {
+        const res = await request.patch(`/users/${id}`, payload, { contentType: 'multipart/form-data;' });
+        return res;
     } catch (error) {
         throw error;
     }
@@ -26,4 +44,4 @@ const unfollowAUser = async (id) => {
     }
 };
 
-export { getFollowings, followAUser, unfollowAUser };
+export { getFollowingUsers, getUserProfile, updateProfile, followAUser, unfollowAUser };

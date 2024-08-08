@@ -14,7 +14,7 @@ function AccountItem({ data }) {
     return (
         <div className={cx('wrapper')}>
             <Image className={cx('avatar')} src={data.avatar} alt="avatar"></Image>
-            <Link to={`/@${data.nickName}`} className={cx('info')}>
+            <Link to={`/@${data.tiktokID}`} className={cx('info')}>
                 <h4 className={cx('nickname')}>
                     {data.nickName}
                     {data.tick && (

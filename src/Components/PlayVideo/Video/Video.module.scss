@@ -1,11 +1,217 @@
 .wrapper {
+    position: relative;
+    max-height: calc(100vh - 180px);
     height: 100%;
     width: 100%;
+    background-color: #f1f1f2;
+    cursor: pointer;
+
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        display: none;
+    }
+    .active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .video {
     width: 100%;
     height: 100%;
-    max-height: calc(100vh - 180px);
+    max-height: inherit;
     object-fit: cover; /* Đảm bảo video không bị méo và điền đầy khung chứa */
+    object-position: center;
+}
+
+.control {
+    cursor: pointer;
+    color: var(--white-color);
+    width: 100%;
+    height: 30%;
+    position: absolute;
+    // top: 0;
+    // right: 0;
+    // left: 0;
+    bottom: 0;
+
+    &:hover > .control-overlay {
+        opacity: 1;
+    }
+}
+
+.control-overlay {
+    background: linear-gradient(rgba(18, 18, 18, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+    width: 100%;
+    height: 40%;
+    position: absolute;
+    bottom: 0px;
+    padding: 0 10px;
+    opacity: 0;
+    transition: opacity ease-in-out 0.125s;
+    display: flex;
+    align-items: flex-end;
+}
+
+.video-action {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.video-control {
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+
+    span {
+        display: inline-block;
+        width: 36px;
+        padding: 0 8px;
+    }
+}
+
+.scroll-volume {
+    display: flex;
+    min-width: 55px;
+}
+
+.scroll-volume__icon {
+    display: block;
+    margin-left: 8px;
+    position: relative;
+
+    .volume-slider__wrapper {
+        display: none;
+        position: absolute;
+        width: 24px;
+        height: 70px;
+        background-color: rgba(22, 24, 35, 0.34);
+        top: -72px;
+        left: 0;
+        padding: 8px 0;
+        border-radius: 32px;
+    }
+    &:hover .volume-slider__wrapper {
+        display: block;
+    }
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 24px;
+        height: 16px;
+        top: -12px;
+    }
+
+    .volume-slider__progress {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 60px; /* Chiều cao của thanh trượt */
+        height: 6px; /* Độ rộng của thanh trượt */
+        background: #ccc;
+        transform: rotate(-90deg) translateX(-41px) translateY(12px); /* Xoay thanh trượt 90 độ để quay dọc */
+        transform-origin: 0; /* Thiết lập gốc xoay ở giữa */
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-webkit-slider-runnable-track {
+        width: 6px;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-moz-range-track {
+        width: 6px;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .volume-slider__progress::-ms-track {
+        width: 6px;
+        height: 100%;
+        // background: white; /* Màu gradient xanh dương đến xanh lá cây */
+        border-radius: 5px;
+        border: none; /* Loại bỏ đường viền mặc định */
+        color: transparent; /* Ẩn các dấu tick */
+    }
+
+    /* Customizing the thumb */
+    .volume-slider__progress::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px;
+        height: 12px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+        margin-top: -3px; /* Để thumb nằm giữa track */
+    }
+
+    .volume-slider__progress::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+    }
+
+    .volume-slider__progress::-ms-thumb {
+        width: 15px;
+        height: 15px;
+        background: white; /* Màu đỏ cho thumb */
+        border-radius: 50%; /* Hình tròn */
+        cursor: pointer;
+    }
+}
+.video-progress {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 2px;
+    background-color: #3c3c3c;
+    border-radius: 2px;
+    position: relative;
+    margin-right: 16px;
+
+    &:hover {
+        height: 4px;
+
+        .progress-thumb::after {
+            opacity: 1;
+        }
+    }
+}
+
+.progress-thumb {
+    position: absolute;
+    width: 15%;
+    height: inherit;
+    background-color: var(--white-color);
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--white-color);
+        right: -6px;
+        top: -4px;
+        display: block;
+        opacity: 0;
+    }
+}
+
+.progress-time {
+    padding: 0 8px;
 }

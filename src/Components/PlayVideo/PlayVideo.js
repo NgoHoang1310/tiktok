@@ -1,69 +1,66 @@
 import classNames from 'classnames/bind';
 import styles from './PlayVideo.module.scss';
 
-import { useState, useRef, useEffect, forwardRef, memo } from 'react';
+import { useState, useRef, useEffect, forwardRef, memo, useCallback, useContext } from 'react';
 
 import Image from '~/components/Image';
 import VideoInformation from './VideoInformation';
 import Video from './Video';
 import Interaction from '../Interaction';
 import Button from '../Button';
-import ControlVideo from './ControlVideo';
 
 import * as apiService from '~/services';
-import { useStore } from '~/hooks';
+import { useStore, useFollow, useReaction } from '~/hooks';
+
 import { actions } from '~/store';
-
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
-function PlayVideo({ data, followDisable = false }, ref) {
+function PlayVideo({ index, data, followDisable = false }, ref) {
     const [state, dispatch] = useStore();
-    const { followingUsers, isLogin, showModal } = state;
-    const [following, setFollowing] = useState(false);
+    const [follow, handleFollow] = useFollow(data?.userId, data?.userInfo?.isFollowing);
+    const { currentUser } = state;
     const videoRef = useRef();
-    //get following lists
-    useEffect(() => {
-        setFollowing(followingUsers.some((follow) => follow.followingId === data.userId));
-    }, [followingUsers]);
 
-    const handleFollow = async () => {
-        if (isLogin) {
-            if (following) {
-                await apiService.unfollowAUser(data?.userId);
-                setFollowing(false);
-            } else {
-                await apiService.followAUser(data?.userId);
-                setFollowing(true);
-            }
+    const handleOpenFullscreen = useCallback(() => {
+        videoRef.current?.pause();
+        let currentTime = videoRef.current?.currentTime;
 
-            return;
-        }
-        dispatch(actions.showModal(showModal));
-    };
-
+        dispatch(actions.setCurrentVideo({ index: index, currentTime: currentTime }));
+        dispatch(actions.setFullscreen(true));
+    }, []);
     return (
         <div ref={ref} className={cx('wrapper')}>
-            <Image className={cx('avatar')} src={data?.userInfo?.avatar} alt="avatar" />
+            <Link to={`/@${data?.userInfo?.tiktokID}`}>
+                <Image className={cx('avatar')} src={data?.userInfo?.avatar} alt="avatar" />
+            </Link>
             <div className={cx('content')}>
                 <div className={cx('content-header')}>
                     <VideoInformation data={data} />
                     <div className="follow-btn">
                         {followDisable ? (
                             <></>
+                        ) : currentUser?._id !== data?.userInfo?._id ? (
+                            <Button outline simple={follow} onClick={handleFollow}>
+                                {follow ? 'Following' : 'Follow'}
+                            </Button>
                         ) : (
-                            <Button outline simple={following} onClick={handleFollow}>
-                                {following ? 'Following' : 'Follow'}
+                            <Button outline simple>
+                                You
                             </Button>
                         )}
                     </div>
                 </div>
                 <div className={cx('content-body')}>
                     <div className={cx('video')}>
-                        <Video ref={videoRef} video={data?.filePath} thumb={data?.thumbPath} preload={'auto'} />
-                        <div className={cx('video-overlay')}>
-                            <ControlVideo videoRef={videoRef} />
-                        </div>
+                        <Video
+                            onClick={handleOpenFullscreen}
+                            ref={videoRef}
+                            video={data?.filePath}
+                            thumb={data?.thumbPath}
+                            preload="metadata"
+                        />
                     </div>
-                    <Interaction />
+                    <Interaction data={data} onOpenFullscreen={handleOpenFullscreen} />
                 </div>
             </div>
         </div>

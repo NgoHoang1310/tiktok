@@ -1,55 +1,65 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import PlayVideo from '~/components/PlayVideo';
+// import InfiniteScroll from '~/hoc/InfiniteScroll/InfiniteScroll';
+import FullscreenVideo from '~/layouts/FullscreenVideo';
+import Loading from '~/components/PlaceHolder/Loading';
 import * as apiService from '~/services';
-import { useStore } from '~/hooks';
+import { useStore, useFollow } from '~/hooks';
 import { actions } from '~/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import VideoProvider from '~/hoc/Provider/VideoProvider';
+
+export const HomeContext = createContext();
 
 const cx = classNames.bind(styles);
 function Home() {
     const [state, dispatch] = useStore();
-    const { currentUser, isLogin } = state;
-    const [loading, setLoading] = useState(true);
-    const currentVideoIndex = useRef(0);
-    const playVideoRef = useRef([]);
+    const { isLogin, isFullScreen, currentVideo, currentUser } = state;
     const [videos, setVideos] = useState([]);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const playVideoRef = useRef([]);
+    const pagination = useRef({});
+
     useEffect(() => {
         const fetchApi = async () => {
-            const res = await apiService.getListVideos();
+            let res = [];
+            if (isLogin) {
+                res = await apiService.getVideosForyou(page, 2);
+            } else {
+                res = await apiService.getListVideos(page, 2);
+            }
             setLoading(false);
-            setVideos(res);
+            pagination.current = res.pagination;
+            setVideos((prev) => [...prev, ...res?.data]);
         };
         fetchApi();
-    }, []);
+    }, [isLogin, page]);
 
-    useEffect(() => {
-        const fetchApi = async (id) => {
-            const res = await apiService.getFollowings(id);
-            dispatch(actions.followingUsers(res));
-        };
-        isLogin && currentUser?._id && fetchApi(currentUser._id);
-    }, [isLogin, currentUser?._id]);
-
+    //xử lí sự kiện bấm nút lên/xuống
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.code == 'ArrowDown') {
+            if (e.code == 'ArrowDown' && !isFullScreen) {
                 e.preventDefault();
-                currentVideoIndex.current < videos.length - 1 && currentVideoIndex.current++;
-                playVideoRef.current[currentVideoIndex.current].scrollIntoView({
+                currentVideo.index < videos.length - 1 && currentVideo.index++;
+                playVideoRef.current[currentVideo.index]?.scrollIntoView({
                     behavior: 'smooth',
                     block: 'end',
                 });
             }
 
-            if (e.code == 'ArrowUp') {
+            if (e.code == 'ArrowUp' && !isFullScreen) {
                 e.preventDefault();
-                currentVideoIndex.current > 0 && currentVideoIndex.current--;
-                playVideoRef.current[currentVideoIndex.current].scrollIntoView({
+                currentVideo.index > 0 && currentVideo.index--;
+                playVideoRef.current[currentVideo.index]?.scrollIntoView({
                     behavior: 'smooth',
                     block: 'end',
                 });
@@ -61,27 +71,65 @@ function Home() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [videos]);
+    }, [videos, isFullScreen]);
+
+    //xử lí tự động cuộn đến video hiện tại khi thoát chế độ xem toàn màn hình
+    useEffect(() => {
+        if (!isFullScreen) {
+            playVideoRef.current[currentVideo.index]?.scrollIntoView({
+                behavior: 'instant',
+                block: 'end',
+            });
+        }
+    }, [currentVideo]);
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('content')}>
-                {loading ? (
-                    <Box sx={{ width: '70%', display: 'flex', padding: '10px 0', alignItems: 'center' }}>
-                        <Skeleton variant="circular" width={60} height={60} />
-                        <Box sx={{ flex: 1, margin: '0 8px' }}>
-                            <Skeleton animation="wave" />
-                            <Skeleton animation="wave" />
-                            <Skeleton animation="wave" />
-                        </Box>
-                    </Box>
-                ) : (
-                    videos?.map((video, index) => (
-                        <PlayVideo ref={(el) => (playVideoRef.current[index] = el)} key={index} data={video} />
-                    ))
-                )}
+        <VideoProvider>
+            <div className={cx('wrapper')}>
+                <div className={cx('content')}>
+                    <InfiniteScroll
+                        dataLength={videos.length}
+                        next={() =>
+                            setPage((prev) => {
+                                if (pagination.current?.hasNextPage) {
+                                    return pagination.current?.nextPage;
+                                }
+                                return prev;
+                            })
+                        }
+                        hasMore={pagination.current?.hasNextPage}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>
+                                    Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                </b>
+                            </p>
+                        }
+                    >
+                        {loading ? (
+                            <Box sx={{ width: '70%', display: 'flex', padding: '10px 0', alignItems: 'center' }}>
+                                <Skeleton variant="circular" width={60} height={60} />
+                                <Box sx={{ flex: 1, margin: '0 8px' }}>
+                                    <Skeleton animation="wave" />
+                                    <Skeleton animation="wave" />
+                                    <Skeleton animation="wave" />
+                                </Box>
+                            </Box>
+                        ) : (
+                            videos?.map((video, index) => (
+                                <PlayVideo
+                                    ref={(el) => (playVideoRef.current[index] = el)}
+                                    key={index}
+                                    index={index}
+                                    data={video}
+                                />
+                            ))
+                        )}
+                    </InfiniteScroll>
+                    <FullscreenVideo videos={videos} goBack={'/'} />
+                </div>
             </div>
-        </div>
+        </VideoProvider>
     );
 }
 

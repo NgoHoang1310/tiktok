@@ -1,13 +1,18 @@
-import { followingUsers } from './actions';
 import {
     SHOW_MODAL,
     INITIALIZE,
     USER_LOGIN,
+    VIDEOS,
     USER_LOGOUT,
     AUTO_SCROLL,
     MUTE,
     SET_VOLUME,
     FOLLOWING_USERS,
+    SET_FULLSCREEN,
+    SET_CURRENT_VIDEO,
+    SET_FOLLOW,
+    SET_REACTIONS,
+    SET_REACTIONS_COUNT,
 } from './constants';
 
 const initial = {
@@ -15,10 +20,16 @@ const initial = {
     showModal: false,
     isLogin: localStorage.getItem('isLogin') === 'true',
     currentUser: {},
+    currentVideo: { index: 0, currentTime: 0 },
+    videos: [],
     isAutoScroll: false,
-    isMute: false,
+    isMute: true,
     volume: 50,
     followingUsers: [],
+    reactions: {},
+    reactionsCount: {},
+    follow: {},
+    isFullScreen: false,
 };
 
 const reducer = (state, action) => {
@@ -76,6 +87,45 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 followingUsers: action.payload,
+            };
+        }
+
+        case SET_FULLSCREEN: {
+            return {
+                ...state,
+                isFullScreen: action.payload,
+            };
+        }
+
+        case SET_CURRENT_VIDEO: {
+            return {
+                ...state,
+                currentVideo: action.payload,
+            };
+        }
+
+        case VIDEOS: {
+            return {
+                ...state,
+                videos: action.payload,
+            };
+        }
+        case SET_FOLLOW: {
+            return {
+                ...state,
+                follow: action.payload,
+            };
+        }
+        case SET_REACTIONS: {
+            return {
+                ...state,
+                reactions: action.payload,
+            };
+        }
+        case SET_REACTIONS_COUNT: {
+            return {
+                ...state,
+                reactionsCount: action.payload,
             };
         }
         default:

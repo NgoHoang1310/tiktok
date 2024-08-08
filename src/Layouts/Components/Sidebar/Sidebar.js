@@ -21,12 +21,24 @@ import ListAccounts from '~/components/ListAccounts';
 import Login from '~/layouts/Components/Sidebar/Login';
 import Footer from '~/layouts/Components/Sidebar/Footer';
 import { useStore } from '~/hooks';
+import { useEffect, useState } from 'react';
+
+import * as apiService from '~/services';
 
 const cx = classNames.bind(styles);
 function Sidebar() {
     const [state] = useStore();
-    const { initialize, isLogin } = state;
+    const [following, setFollowing] = useState([]);
+    const { initialize, isLogin, currentUser } = state;
 
+    useEffect(() => {
+        const fetchApi = async (userId) => {
+            const res = await apiService.getFollowingUsers(userId);
+            setFollowing(res);
+        };
+
+        isLogin && currentUser?._id && fetchApi(currentUser._id);
+    }, [isLogin, currentUser?._id]);
     return (
         <aside className={cx('wrapper')}>
             <Menu>
@@ -43,12 +55,12 @@ function Sidebar() {
                     to={config.routes.following}
                     requireAuth
                 />
-                <MenuItem
+                {/* <MenuItem
                     title="Bạn bè"
                     icon={<UserGroupIcon />}
                     activeIcon={<UserGroupActiveIcon />}
                     to={config.routes.friends}
-                />
+                /> */}
                 <MenuItem
                     title="Khám phá"
                     icon={<CompassIcon />}
@@ -59,7 +71,8 @@ function Sidebar() {
                     title="Hồ sơ"
                     icon={<UserIcon />}
                     activeIcon={<UserActiveIcon />}
-                    to={config.routes.profile}
+                    to={`/@${currentUser?.tiktokID}`}
+                    requireAuth
                 />
             </Menu>
             {initialize ? (
@@ -71,7 +84,7 @@ function Sidebar() {
                     </Box>
                 </Box>
             ) : (
-                <>{!isLogin ? <Login /> : <ListAccounts label="Các tài khoản đang follow" />}</>
+                <>{!isLogin ? <Login /> : <ListAccounts label="Các tài khoản đang follow" data={following} />}</>
             )}
 
             <Footer />

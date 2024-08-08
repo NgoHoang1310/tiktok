@@ -4,6 +4,11 @@ import { faCircleCheck, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertTimeToISO } from '~/utils/common';
+import Image from '~/components/Image';
+import Button from '~/components/Button';
+import { Link } from 'react-router-dom';
+
+import { memo } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -13,10 +18,10 @@ function VideoInformation({ data }) {
             <div className={cx('video-info')}>
                 <div className={cx('account-info')}>
                     <h3 className={cx('nickname')}>
-                        {data?.userInfo?.nickName}
+                        {data?.userInfo?.tiktokID}
                         <span>{data?.userInfo?.tick && <FontAwesomeIcon icon={faCircleCheck} />}</span>
                     </h3>
-                    <h4 className={cx('name')}>{data?.userInfo?.fullName}</h4>
+                    <h4 className={cx('name')}>{data?.userInfo?.nickName}</h4>
                     <span className={cx('date')}>{convertTimeToISO(data?.createdAt)}</span>
                 </div>
                 <div className={cx('title')}>
@@ -36,4 +41,4 @@ function VideoInformation({ data }) {
     );
 }
 
-export default VideoInformation;
+export default memo(VideoInformation);

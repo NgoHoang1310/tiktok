@@ -1,11 +1,6 @@
-.wrapper {
-    margin-left: 20px;
-}
 .list {
     height: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
     list-style: none;
     cursor: pointer;
 }
@@ -16,9 +11,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 2.2rem;
-        width: 48px;
-        height: 48px;
         background-color: rgba(22, 24, 35, 0.06);
         border-radius: 50%;
         margin: 2px 0;
@@ -38,6 +30,38 @@
 .icon.bookMarkActive {
     animation: Beat 0.4s ease-in-out;
     color: #face15;
+}
+
+.vertical {
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.horizontal {
+    flex-direction: row;
+    align-items: center;
+
+    .item {
+        display: flex;
+        align-items: center;
+        margin: 0 4px;
+
+        span {
+            padding: 0 4px;
+        }
+    }
+}
+
+.small {
+    font-size: 1.6rem;
+    width: 32px;
+    height: 32px;
+}
+
+.medium {
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
 }
 
 @keyframes Beat {

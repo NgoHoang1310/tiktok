@@ -1,15 +1,12 @@
 import classNames from 'classnames/bind';
-import styles from './PlayVideo.module.scss';
+import styles from './Video.module.scss';
 
 import { useEffect, useRef, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
-import { Slider, Stack } from '@mui/material';
+import { Slider } from '@mui/material';
 
-import HeadlessTippy from '@tippyjs/react/headless';
-
-import { Wrapper as PopperWrapper } from '~/components/Popper';
 import { LockScrollIcon, AutoScrollIcon } from '~/components/Icons';
 
 import { formatTime } from '~/utils/common';
@@ -18,16 +15,15 @@ import { actions } from '~/store';
 import { setVolume } from '~/store/actions';
 
 const cx = classNames.bind(styles);
-function ControlVideo({ videoRef }) {
+function ControlVideo({ videoRef, onLoading }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
     const [state, dispatch] = useStore();
-    const { isAutoScroll, isMute, volume } = state;
+    const { isAutoScroll, isMute, volume, currentVideo } = state;
     const [play, setPlay] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [videoReady, setVideoReady] = useState(false);
-
+    const videoReady = useRef(false);
     //xử lý phát video mỗi khi nằm trong viewport
     useEffect(() => {
         const handleIntersection = (entries) => {
@@ -53,7 +49,7 @@ function ControlVideo({ videoRef }) {
             }
             handlePause();
         };
-    }, [videoReady]);
+    }, [videoReady.current]);
 
     //xử lý set độ dài của video
     useEffect(() => {
@@ -71,9 +67,12 @@ function ControlVideo({ videoRef }) {
     }, []);
     //xử lý khi video kết thúc
     useEffect(() => {
-        videoRef.current.addEventListener('ended', handlePause);
+        const handleEnded = () => {
+            setPlay(false);
+        };
+        videoRef.current.addEventListener('ended', handleEnded);
         return () => {
-            videoRef.current?.removeEventListener('ended', handlePause);
+            videoRef.current?.removeEventListener('ended', handleEnded);
         };
     }, []);
 
@@ -86,29 +85,46 @@ function ControlVideo({ videoRef }) {
         video.volume = value / 100;
     }, [volume]);
 
-    //xử lí chặn phát video khi video chưa sẵn sàng để phát
     useEffect(() => {
-        const handleVideoCanplay = () => {
-            setVideoReady(true);
+        const handleWaiting = () => {
+            videoReady.current = false;
+            onLoading(true);
         };
-        videoRef.current.addEventListener('canplay', handleVideoCanplay);
+        const handleVideoCanplay = () => {
+            videoReady.current = true;
+            onLoading(false);
+        };
+        if (videoRef.current) {
+            videoRef.current.addEventListener('waiting', handleWaiting);
+            videoRef.current.addEventListener('canplay', handleVideoCanplay);
+            videoRef.current.addEventListener('playing', handleVideoCanplay);
+        }
 
         return () => {
-            videoRef.current?.removeEventListener('canplay', handleVideoCanplay);
+            if (videoRef.current) {
+                videoRef.current.removeEventListener('waiting', handleWaiting);
+                videoRef.current.removeEventListener('canplay', handleVideoCanplay);
+                videoRef.current.removeEventListener('playing', handleVideoCanplay);
+            }
         };
     }, []);
 
+    //xử lí chặn phát video khi video chưa sẵn sàng để phát
+
     const handlePlay = () => {
-        if (videoReady) {
+        if (videoReady.current) {
             videoRef.current?.play();
             setPlay(true);
         }
     };
 
     const handlePause = () => {
-        videoRef.current?.pause();
-        setPlay(false);
+        if (videoReady.current) {
+            videoRef.current?.pause();
+            setPlay(false);
+        }
     };
+
     const handleMute = (e) => {
         e.stopPropagation();
         videoRef.current.muted = !isMute;
@@ -127,6 +143,8 @@ function ControlVideo({ videoRef }) {
     };
 
     const handleSeeking = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         videoRef.current.currentTime = e.target.value;
         setCurrentTime(e.target.value);
     };

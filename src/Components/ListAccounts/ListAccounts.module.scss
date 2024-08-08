@@ -1,14 +1,14 @@
 .wrapper {
     width: 100%;
-    border-top: 1px solid rgba(22, 24, 35, 0.12);
     padding: 20px 0;
+    border-top: 1px solid rgba(22, 24, 35, 0.12);
 
     .list-label {
         display: block;
+        margin-bottom: 8px;
         color: rgba(22, 24, 35, 0.75);
         font-size: 1.4rem;
         font-weight: 600;
-        margin-bottom: 8px;
     }
 }
 
@@ -17,8 +17,8 @@
     align-items: center;
     padding: 8px 8px 8px 0;
     border-radius: 4px;
-    transition: background-color 200ms ease-in-out 0s;
     cursor: pointer;
+    transition: background-color 200ms ease-in-out 0s;
 
     &:hover {
         background-color: var(--nav-hover-color);
@@ -33,6 +33,12 @@
 }
 .account-info {
     margin-left: 16px;
+
+    .comment {
+        line-height: 21px;
+        color: black;
+        font-size: 1.6rem;
+    }
 }
 .nickname {
     font-size: 1.6rem;
@@ -43,13 +49,13 @@
     }
 }
 .name {
-    font-size: 1.2rem;
     color: rgba(22, 24, 35, 0.5);
+    font-size: 1.2rem;
 }
 
 .more-btn {
-    color: var(--primary-color);
     margin-top: 8px;
+    color: var(--primary-color);
     font-size: 1.4rem;
     font-weight: 600;
 }

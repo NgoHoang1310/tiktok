@@ -1,5 +1,5 @@
 const convertTimeToISO = (time) => {
-    const datePart = time.split('T')[0];
+    const datePart = time?.split('T')[0];
     return datePart;
 };
 

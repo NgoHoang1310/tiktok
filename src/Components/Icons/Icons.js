@@ -96,8 +96,14 @@ function UserFollowerIcon({ width = '2.8rem', height = '2.8rem', className }) {
 function UserFollowerActiveIcon({ width = '2.8rem', height = '2.8rem', className }) {
     return (
         <div style={{ height: '3.2rem', width: '3.2rem', paddingLeft: '4px' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="rgba(254, 44, 85, 1)">
-                <use xlinkHref="#person_arrow_left_fill-a3cca6e8"></use>
+            <svg
+                fill="rgba(254, 44, 85, 1)"
+                width={width}
+                height={height}
+                viewBox="0 0 48 48"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M18.99 4a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 4a6 6 0 1 0 0 12.00A6 6 0 0 0 19 8ZM18.99 27c2.96 0 5.6.58 7.87 1.65l-3.07 3.06a15.38 15.38 0 0 0-4.8-.71C10.9 31 6.3 36.16 6 44c-.02.55-.46 1-1.02 1h-2c-.55 0-1-.45-.98-1C2.33 33.99 8.7 27 19 27ZM35.7 42.88 31.82 39H45a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H31.82l3.88-3.88a1 1 0 0 0 0-1.41l-1.41-1.42a1 1 0 0 0-1.42 0l-7.3 7.3a2 2 0 0 0 0 2.82l7.3 7.3a1 1 0 0 0 1.42 0l1.41-1.42a1 1 0 0 0 0-1.41Z"></path>
             </svg>
         </div>
     );
@@ -531,6 +537,50 @@ function AutoScrollIcon({ width = '2.2rem', height = '2.2rem', className }) {
     );
 }
 
+function LockIcon({ width = '2.2rem', height = '2.2rem', className }) {
+    return (
+        <svg width={width} height={height} viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M24 3C17.9249 3 13 7.92487 13 14V21H8C6.89543 21 6 21.8954 6 23V41C6 42.1046 6.89543 43 8 43H40C41.1046 43 42 42.1046 42 41V23C42 21.8954 41.1046 21 40 21H35V14C35 7.92487 30.0751 3 24 3ZM31 21V14C31 10.134 27.866 7 24 7C20.134 7 17 10.134 17 14V21H31Z"
+            ></path>
+        </svg>
+    );
+}
+
+function TiktokLoadingIcon({ width = '2.2rem', height = '2.2rem', className }) {
+    return (
+        <svg preserveAspectRatio="none" viewBox="0 0 200 200" width={width}>
+            <defs>
+                <mask id="redhole-1721113756699">
+                    <rect width="100%" height="100%" fill="white"></rect>
+                    <circle class="css-dt84ji-Circle e1ugmybf0"></circle>
+                </mask>
+                <mask id="greenhole-1721113756699">
+                    <rect width="100%" height="100%" fill="white"></rect>
+                    <circle class="css-nuz7yg-Circle e1ugmybf0"></circle>
+                </mask>
+            </defs>
+            <circle stroke-width="2" stroke="#3AF2FF" class="css-1ibclz-Circle e1ugmybf0"></circle>
+            <circle mask="url(#redhole-1721113756699)" class="css-1ie96h1-Circle e1ugmybf0"></circle>
+            <circle mask="url(#greenhole-1721113756699)" class="css-162i5jd-Circle e1ugmybf0"></circle>
+        </svg>
+    );
+}
+
+function LightHeartIcon({ width = '2.2rem', height = '2.2rem', className }) {
+    return (
+        <svg width={width} height={height} viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M24 9.01703C19.0025 3.74266 11.4674 3.736 6.67302 8.56049C1.77566 13.4886 1.77566 21.4735 6.67302 26.4016L22.5814 42.4098C22.9568 42.7876 23.4674 43 24 43C24.5326 43 25.0432 42.7876 25.4186 42.4098L41.327 26.4016C46.2243 21.4735 46.2243 13.4886 41.327 8.56049C36.5326 3.736 28.9975 3.74266 24 9.01703ZM21.4938 12.2118C17.9849 8.07195 12.7825 8.08727 9.51028 11.3801C6.16324 14.7481 6.16324 20.214 9.51028 23.582L24 38.1627L38.4897 23.582C41.8368 20.214 41.8368 14.7481 38.4897 11.3801C35.2175 8.08727 30.0151 8.07195 26.5062 12.2118L26.455 12.2722L25.4186 13.3151C25.0432 13.6929 24.5326 13.9053 24 13.9053C23.4674 13.9053 22.9568 13.6929 22.5814 13.3151L21.545 12.2722L21.4938 12.2118Z"
+            ></path>
+        </svg>
+    );
+}
+
 export {
     Message,
     BoxMessage,
@@ -559,4 +609,7 @@ export {
     LiveIcon,
     LockScrollIcon,
     AutoScrollIcon,
+    LockIcon,
+    TiktokLoadingIcon,
+    LightHeartIcon,
 };

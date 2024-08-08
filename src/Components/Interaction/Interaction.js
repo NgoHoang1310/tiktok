@@ -4,39 +4,47 @@ import styles from './Interaction.module.scss';
 // import { HeartIcon, CommentIcon, BookMarkIcon, ShareIcon } from '~/components/Icons';
 import { faHeart, faCommentDots, faShare, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, memo } from 'react';
+import { useState, memo, useContext, useEffect, useMemo } from 'react';
+import { useReaction } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
-function Interaction({ data }) {
-    const [heartActive, setHeartActive] = useState(false);
-    const [bookMarkActive, setBookMarkActive] = useState(false);
+function Interaction({ size = 'medium', data, className, direction = 'vertical', onOpenFullscreen, ...props }) {
+    const [reactions, reactionsCount, handleReactions] = useReaction(
+        data?._id,
+        { like: data?.isLiked, favourite: data?.isFavourited },
+        { like: data?.likesCount, favourite: data?.favouritesCount },
+    );
+
     return (
-        <div className={cx('wrapper')}>
-            <ul className={cx('list')}>
+        <div className={cx('wrapper', { [className]: className })} {...props}>
+            <ul className={cx('list', direction)}>
                 <li className={cx('item')}>
-                    <div onClick={() => setHeartActive(!heartActive)}>
-                        <FontAwesomeIcon className={cx('icon', { heartActive: heartActive })} icon={faHeart} />
+                    <div className={cx(size)} onClick={() => handleReactions('like')}>
+                        <FontAwesomeIcon className={cx('icon', { heartActive: reactions?.like })} icon={faHeart} />
                     </div>
-                    <span>14.8K</span>
+                    <span>{reactionsCount?.like}</span>
                 </li>
                 <li className={cx('item')}>
-                    <div>
+                    <div onClick={onOpenFullscreen} className={cx(size)}>
                         <FontAwesomeIcon className={cx('icon')} icon={faCommentDots} />
                     </div>
-                    <span>14.8K</span>
+                    <span>{data?.commentsCount}</span>
                 </li>
                 <li className={cx('item')}>
-                    <div onClick={() => setBookMarkActive(!bookMarkActive)}>
-                        <FontAwesomeIcon className={cx('icon', { bookMarkActive: bookMarkActive })} icon={faBookmark} />
+                    <div className={cx(size)} onClick={() => handleReactions('favourite')}>
+                        <FontAwesomeIcon
+                            className={cx('icon', { bookMarkActive: reactions?.favourite })}
+                            icon={faBookmark}
+                        />
                     </div>
-                    <span>14.8K</span>
+                    <span>{reactionsCount?.favourite}</span>
                 </li>
                 <li className={cx('item')}>
-                    <div>
+                    <div className={cx(size)}>
                         <FontAwesomeIcon className={cx('icon')} icon={faShare} />
                     </div>
-                    <span>14.8K</span>
+                    <span>{data?.sharesCount}</span>
                 </li>
             </ul>
         </div>

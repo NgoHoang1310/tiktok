@@ -4,6 +4,7 @@ import Context from './Context';
 import { initial } from './reducer';
 import { initialize, userLogin, userLogOut } from './actions';
 import reducer from './reducer';
+import { toast } from 'react-toastify';
 import * as apiServices from '~/services';
 function Provider({ children }) {
     const [state, dispatch] = useReducer(reducer, initial);
@@ -22,9 +23,10 @@ function Provider({ children }) {
                     dispatch(initialize(false));
                 }
             } catch (error) {
-                if (error?.statusCode === 500) {
+                if (error?.response?.status === 403) {
                     dispatch(initialize(false));
                     dispatch(userLogOut());
+                    toast('Phiên đăng nhập hết hạn !');
                 }
             }
         })();

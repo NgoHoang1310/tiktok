@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 function Form({ type, onLogin }) {
     const [loading, setLoading] = useState(false);
     const [fullName, setFullName] = useState('');
-    const [nickName, setNickName] = useState('');
+    const [tiktokID, setTiktokID] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -22,7 +22,7 @@ function Form({ type, onLogin }) {
     const handleRegister = async () => {
         if (password !== passwordConfirm) return;
         setLoading(true);
-        const res = await apiServices.register({ fullName, nickName, email, password });
+        const res = await apiServices.register({ fullName, tiktokID, email, password });
         switch (res?.status) {
             case 201: {
                 toast('Đăng kí tài khoản thành công !');
@@ -31,7 +31,7 @@ function Form({ type, onLogin }) {
                 break;
             }
             case 409: {
-                toast('Email đã được sử dụng !');
+                toast('Email hoặc TiktokID đã được sử dụng !');
                 setLoading(false);
                 break;
             }
@@ -75,7 +75,7 @@ function Form({ type, onLogin }) {
             formGroupSelector: '.mb-3',
             rules: [
                 Validator.isRequire('#formFullName'),
-                Validator.isRequire('#formNickName'),
+                Validator.isRequire('#formTiktokID'),
                 Validator.isRequire('#formEmail'),
                 Validator.isEmail('#formEmail'),
                 Validator.isRequire(`#formPassword`),
@@ -114,17 +114,17 @@ function Form({ type, onLogin }) {
                             <span className={cx('form-message')}></span>
                         </div>
                         <div className={cx('mb-3')}>
-                            <label htmlFor="formNickName" className={cx('form-label')}>
-                                Biệt danh
+                            <label htmlFor="formTiktokID" className={cx('form-label')}>
+                                TiktokID
                             </label>
                             <input
                                 type="text"
                                 className={cx('form-control')}
-                                id="formNickName"
-                                name="nickName"
+                                id="formTiktokID"
+                                name="tiktokID"
                                 placeholder="VD: Hoangutt72"
-                                value={nickName}
-                                onChange={(e) => handleChange(e, setNickName)}
+                                value={tiktokID}
+                                onChange={(e) => handleChange(e, setTiktokID)}
                             />
                             <span className={cx('form-message')}></span>
                         </div>

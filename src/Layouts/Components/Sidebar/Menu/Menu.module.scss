@@ -6,11 +6,15 @@
 .menu-item {
     display: flex;
     align-items: center;
-    font-size: 1.8rem;
-    font-weight: 700;
     padding: 8px 8px 8px 0;
     border-radius: 4px;
     transition: background-color 200ms ease-in-out 0s;
+    font-size: 1.8rem;
+    font-weight: 700;
+
+    &:hover {
+        background-color: var(--nav-hover-color);
+    }
 
     &.active {
         color: var(--primary-color);
@@ -22,10 +26,6 @@
         .activeIcon {
             display: block;
         }
-    }
-
-    &:hover {
-        background-color: var(--nav-hover-color);
     }
 }
 

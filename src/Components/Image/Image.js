@@ -7,7 +7,7 @@ import images from '~/assets/Images';
 
 const cx = classNames.bind(styles);
 
-function Image({ className, src, fallback = images.imagePlaceholder, ...props }, ref) {
+function Image({ className, rounded, src, fallback = images.imagePlaceholder, ...props }, ref) {
     const [_fallback, setFallback] = useState('');
 
     const handelFallback = () => {
@@ -15,7 +15,13 @@ function Image({ className, src, fallback = images.imagePlaceholder, ...props },
     };
 
     return (
-        <img className={cx('wrapper', className)} src={_fallback} ref={ref} {...props} onError={handelFallback}></img>
+        <img
+            className={cx('wrapper', { rounded }, className)}
+            src={src || _fallback}
+            ref={ref}
+            {...props}
+            onError={handelFallback}
+        ></img>
     );
 }
 forwardRef.propTypes = {

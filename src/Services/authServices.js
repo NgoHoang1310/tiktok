@@ -55,21 +55,13 @@ const logout = async (refreshToken) => {
 };
 
 const getMe = async () => {
-    try {
-        const res = await request.get('/auth/me');
-        return res.data;
-    } catch (error) {
-        throw error;
-    }
+    const res = await request.get('/auth/me');
+    return res.data;
 };
 
 const refreshToken = async (payload) => {
-    try {
-        const res = await request.post('/auth/refresh-token', payload);
-        return res.data;
-    } catch (error) {
-        throw error;
-    }
+    const res = await request.post('/auth/refresh-token', payload);
+    return res.data;
 };
 
 export { loginWithFb, register, login, logout, getMe, refreshToken };
