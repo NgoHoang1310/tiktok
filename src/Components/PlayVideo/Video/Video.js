@@ -9,9 +9,9 @@ import ControlVideo from './ControlVideo';
 import { memo, forwardRef, useEffect, useRef, useState, useCallback } from 'react';
 const cx = classNames.bind(styles);
 
-function Video({ video, customControl = true, thumb, className, preview, ...props }, ref) {
+function Video({ video, customControl = true, loading = true, thumb, className, preview, ...props }, ref) {
     const videoRef = useRef();
-    const [_loading, setLoading] = useState(true);
+    const [_loading, setLoading] = useState(loading);
     const mouseEnter = useRef(false);
     if (video && typeof video != 'string') {
         video = URL.createObjectURL(video);
@@ -41,7 +41,6 @@ function Video({ video, customControl = true, thumb, className, preview, ...prop
         }
 
         return () => {
-            // console.log(videoRef);
             if (videoRef.current) {
                 videoRef.current.removeEventListener('mouseenter', handleVideoPlay);
                 videoRef.current.removeEventListener('mouseleave', handleVideoPause);

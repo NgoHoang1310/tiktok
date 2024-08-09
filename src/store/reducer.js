@@ -23,7 +23,7 @@ const initial = {
     currentVideo: { index: 0, currentTime: 0 },
     videos: [],
     isAutoScroll: false,
-    isMute: true,
+    isMute: false,
     volume: 50,
     followingUsers: [],
     reactions: {},

@@ -10,6 +10,7 @@ import { io } from 'socket.io-client';
 import CommentItem from './CommentItem/CommentItem';
 import Loading from '../PlaceHolder/Loading';
 import Error from '~/components/Error';
+import { LockIcon } from '~/components/Icons';
 
 import * as apiServices from '~/services';
 
@@ -119,58 +120,66 @@ function Comment({ video }) {
 
     return (
         <div className={cx('wrapper')}>
-            {!!comments.length ? (
-                <InfiniteScroll
-                    dataLength={comments.length}
-                    next={() =>
-                        setPage((prev) => {
-                            console.log('test');
-                            if (paginationComment.current?.hasNextPage) {
-                                return paginationComment.current?.nextPage;
-                            }
-                            return prev;
-                        })
-                    }
-                    hasMore={paginationComment.current?.hasNextPage}
-                    scrollableTarget="scrollableComment"
-                    loader={
-                        <h4 style={{ textAlign: 'center' }}>
-                            <Loading size={'small'} />
-                        </h4>
-                    }
-                    endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                            <b>
-                                Bạn đã tải hết bình luận <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                            </b>
-                        </p>
-                    }
-                >
-                    <div className={cx('comment-lists')}>
-                        {comments.map((comment, index) => {
-                            const showLoadReplies = comment.repliesCount !== replies[comment._id]?.length;
-                            return (
-                                <CommentItem
-                                    comment={comment._id}
-                                    commentator={comment.commentator}
-                                    key={index}
-                                    repliesCount={comment.repliesCount}
-                                    content={comment.content}
-                                    time={comment.createdAt}
-                                    currentReplyId={currentReplyId}
-                                    videoId={comment.videoId}
-                                    replies={replies[comment._id]}
-                                    showLoadReplies={showLoadReplies}
-                                    showReplyEditor={currentReplyId === comment._id}
-                                    onLoadReplies={handleLoadReplies}
-                                    onShowReplyEditor={handleShowReplyEditor}
-                                />
-                            );
-                        })}
-                    </div>
-                </InfiniteScroll>
+            {video?.viewable === 'public' ? (
+                !!comments.length ? (
+                    <InfiniteScroll
+                        dataLength={comments.length}
+                        next={() =>
+                            setPage((prev) => {
+                                console.log('test');
+                                if (paginationComment.current?.hasNextPage) {
+                                    return paginationComment.current?.nextPage;
+                                }
+                                return prev;
+                            })
+                        }
+                        hasMore={paginationComment.current?.hasNextPage}
+                        scrollableTarget="scrollableComment"
+                        loader={
+                            <h4 style={{ textAlign: 'center' }}>
+                                <Loading size={'small'} />
+                            </h4>
+                        }
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>
+                                    Bạn đã tải hết bình luận <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                </b>
+                            </p>
+                        }
+                    >
+                        <div className={cx('comment-lists')}>
+                            {comments.map((comment, index) => {
+                                const showLoadReplies = comment.repliesCount !== replies[comment._id]?.length;
+                                return (
+                                    <CommentItem
+                                        comment={comment._id}
+                                        commentator={comment.commentator}
+                                        key={index}
+                                        repliesCount={comment.repliesCount}
+                                        content={comment.content}
+                                        time={comment.createdAt}
+                                        currentReplyId={currentReplyId}
+                                        videoId={comment.videoId}
+                                        replies={replies[comment._id]}
+                                        showLoadReplies={showLoadReplies}
+                                        showReplyEditor={currentReplyId === comment._id}
+                                        onLoadReplies={handleLoadReplies}
+                                        onShowReplyEditor={handleShowReplyEditor}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </InfiniteScroll>
+                ) : (
+                    <Error title={'Chưa có bình luận nào'} description={'Hãy là người đầu tiên bình luận video này'} />
+                )
             ) : (
-                <Error title={'Chưa có bình luận nào'} description={'Hãy là người đầu tiên bình luận video này'} />
+                <Error
+                    style={{ marginTop: 20 }}
+                    icon={<LockIcon width="35px" height="35px" />}
+                    description={'Bình luận đã bị tắt'}
+                />
             )}
         </div>
     );

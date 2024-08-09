@@ -19,7 +19,7 @@ function ControlVideo({ videoRef, onLoading }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
     const [state, dispatch] = useStore();
-    const { isAutoScroll, isMute, volume, currentVideo } = state;
+    const { isAutoScroll, isMute, volume } = state;
     const [play, setPlay] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);

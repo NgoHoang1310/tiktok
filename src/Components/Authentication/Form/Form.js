@@ -48,7 +48,9 @@ function Form({ type, onLogin }) {
                 localStorage.setItem('isLogin', 'true');
                 toast('Đăng nhập thành công !');
                 setLoading(false);
-                window.location.reload();
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 800);
                 break;
             }
             case 404: {

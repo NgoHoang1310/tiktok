@@ -12,13 +12,12 @@ import ControlVideo from './ControlVideo';
 const cx = classNames.bind(styles);
 
 function MobilePreview({ data, currentUser }) {
-    console.log('re-render');
     const videoRef = useRef();
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('video-mobile')}>
-                <Video className={cx('video')} ref={videoRef} video={data} />
+                <Video loading={false} customControl={false} className={cx('video')} ref={videoRef} video={data} />
                 <div className={cx('overlay-preview')}>
                     <div className={cx('header-mobile')}>
                         <LiveIcon />
@@ -39,7 +38,6 @@ function MobilePreview({ data, currentUser }) {
                         </div>
                         <div></div>
                     </div>
-
                     <div className={cx('nav-mobile')}></div>
                 </div>
             </div>

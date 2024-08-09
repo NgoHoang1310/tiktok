@@ -21,6 +21,7 @@ function Provider({ children }) {
                 if (user) {
                     dispatch(userLogin(user));
                     dispatch(initialize(false));
+                    localStorage.setItem('currentUser', JSON.stringify(user));
                 }
             } catch (error) {
                 if (error?.response?.status === 403) {

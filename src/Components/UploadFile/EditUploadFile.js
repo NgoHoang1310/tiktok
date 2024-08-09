@@ -182,7 +182,13 @@ function EditUploadFile({ data, onFile }) {
                                         ></div>
                                     ))}
                                 <div ref={frameChooseRef} className={cx('frame-chose')}>
-                                    <Video ref={frameVideoRef} video={data} />
+                                    <Video
+                                        preload="none"
+                                        loading={false}
+                                        customControl={false}
+                                        ref={frameVideoRef}
+                                        video={data}
+                                    />
                                 </div>
                             </div>
                         </div>

@@ -16,7 +16,7 @@ function useReaction(videoId, initial, count) {
                 return { ...prev, [videoId]: initial };
             });
         }
-    }, []);
+    }, [videoId]);
 
     useEffect(() => {
         if (Object.keys(count).length !== 0 && videoId) {
@@ -24,7 +24,7 @@ function useReaction(videoId, initial, count) {
                 return { ...prev, [videoId]: count };
             });
         }
-    }, []);
+    }, [videoId]);
 
     const handleReactions = async (type) => {
         if (isLogin) {

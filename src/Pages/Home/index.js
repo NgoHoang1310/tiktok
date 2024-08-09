@@ -7,7 +7,6 @@ import Skeleton from '@mui/material/Skeleton';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import PlayVideo from '~/components/PlayVideo';
-// import InfiniteScroll from '~/hoc/InfiniteScroll/InfiniteScroll';
 import FullscreenVideo from '~/layouts/FullscreenVideo';
 import Loading from '~/components/PlaceHolder/Loading';
 import * as apiService from '~/services';

@@ -3,9 +3,9 @@ import styles from './Error.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Error({ icon, title, description, button }) {
+function Error({ style, icon, title, description, button }) {
     return (
-        <div className={cx('wrapper')}>
+        <div style={style} className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('icon')}>{icon}</div>
                 <div className={cx('message')}>

@@ -13,6 +13,8 @@ import * as apiService from '~/services';
 import { useStore } from '~/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import VideoProvider from '~/hoc/Provider/VideoProvider';
+
 const cx = classNames.bind(styles);
 
 function Following() {
@@ -73,51 +75,53 @@ function Following() {
     }, [currentVideo]);
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('content')}>
-                <InfiniteScroll
-                    dataLength={videos.length}
-                    next={() =>
-                        setPage((prev) => {
-                            if (pagination.current?.hasNextPage) {
-                                return pagination.current?.nextPage;
-                            }
-                            return prev;
-                        })
-                    }
-                    hasMore={true}
-                    endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                            <b>
-                                Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                            </b>
-                        </p>
-                    }
-                >
-                    {loading ? (
-                        <Box sx={{ width: '70%', display: 'flex', padding: '10px 0', alignItems: 'center' }}>
-                            <Skeleton variant="circular" width={60} height={60} />
-                            <Box sx={{ flex: 1, margin: '0 8px' }}>
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
+        <VideoProvider>
+            <div className={cx('wrapper')}>
+                <div className={cx('content')}>
+                    <InfiniteScroll
+                        dataLength={videos.length}
+                        next={() =>
+                            setPage((prev) => {
+                                if (pagination.current?.hasNextPage) {
+                                    return pagination.current?.nextPage;
+                                }
+                                return prev;
+                            })
+                        }
+                        hasMore={true}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>
+                                    Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                </b>
+                            </p>
+                        }
+                    >
+                        {loading ? (
+                            <Box sx={{ width: '70%', display: 'flex', padding: '10px 0', alignItems: 'center' }}>
+                                <Skeleton variant="circular" width={60} height={60} />
+                                <Box sx={{ flex: 1, margin: '0 8px' }}>
+                                    <Skeleton animation="wave" />
+                                    <Skeleton animation="wave" />
+                                    <Skeleton animation="wave" />
+                                </Box>
                             </Box>
-                        </Box>
-                    ) : (
-                        videos?.map((video, index) => (
-                            <PlayVideo
-                                ref={(el) => (playVideoRef.current[index] = el)}
-                                key={index}
-                                index={index}
-                                data={video}
-                                followDisable
-                            />
-                        ))
-                    )}
-                </InfiniteScroll>
-                {/* <FullscreenVideo videos={videos} goBack={'/following'} /> */}
+                        ) : (
+                            videos?.map((video, index) => (
+                                <PlayVideo
+                                    ref={(el) => (playVideoRef.current[index] = el)}
+                                    key={index}
+                                    index={index}
+                                    data={video}
+                                    followDisable
+                                />
+                            ))
+                        )}
+                    </InfiniteScroll>
+                    <FullscreenVideo followDisable={true} videos={videos} goBack={'/following'} />
+                </div>
             </div>
-        </div>
+        </VideoProvider>
     );
 }
 

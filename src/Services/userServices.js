@@ -1,9 +1,9 @@
 import * as request from '~/utils';
 
-const getFollowingUsers = async (id) => {
+const getFollowingUsers = async (id, options) => {
     try {
-        const res = await request.get(`/users/${id}/following`);
-        return res.data;
+        const res = await request.get(`/users/${id}/following`, { params: options });
+        return res;
     } catch (error) {
         throw error;
     }

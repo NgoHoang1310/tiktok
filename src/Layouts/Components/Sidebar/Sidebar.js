@@ -21,7 +21,7 @@ import ListAccounts from '~/components/ListAccounts';
 import Login from '~/layouts/Components/Sidebar/Login';
 import Footer from '~/layouts/Components/Sidebar/Footer';
 import { useStore } from '~/hooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 
 import * as apiService from '~/services';
 
@@ -30,11 +30,26 @@ function Sidebar() {
     const [state] = useStore();
     const [following, setFollowing] = useState([]);
     const { initialize, isLogin, currentUser } = state;
+    const [loading, setLoading] = useState(false);
+    const paginationFollowing = useRef({});
+
+    const handleLoadMore = useCallback(async () => {
+        let page = 1;
+        setLoading(true);
+        if (paginationFollowing.current.hasNextPage) page = paginationFollowing.current.nextPage;
+        const res = await apiService.getFollowingUsers(currentUser?._id, { page: page, limit: 1 });
+        paginationFollowing.current = res?.pagination;
+        setFollowing((prev) => {
+            return [...prev, ...res?.data];
+        });
+        setLoading(false);
+    }, [currentUser?._id]);
 
     useEffect(() => {
         const fetchApi = async (userId) => {
-            const res = await apiService.getFollowingUsers(userId);
-            setFollowing(res);
+            const res = await apiService.getFollowingUsers(userId, { page: 1, limit: 1 });
+            paginationFollowing.current = res?.pagination;
+            setFollowing(res.data);
         };
 
         isLogin && currentUser?._id && fetchApi(currentUser._id);
@@ -84,7 +99,19 @@ function Sidebar() {
                     </Box>
                 </Box>
             ) : (
-                <>{!isLogin ? <Login /> : <ListAccounts label="Các tài khoản đang follow" data={following} />}</>
+                <>
+                    {!isLogin ? (
+                        <Login />
+                    ) : (
+                        <ListAccounts
+                            loading={loading}
+                            hasMore={paginationFollowing.current.hasNextPage}
+                            onLoadMore={handleLoadMore}
+                            label="Các tài khoản đang follow"
+                            data={following}
+                        />
+                    )}
+                </>
             )}
 
             <Footer />

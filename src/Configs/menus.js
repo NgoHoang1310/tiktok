@@ -79,13 +79,9 @@ const menuUser = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'Xem hồ sơ',
-        to: '/@tuanhoanguttk72',
+        to: `/@${JSON.parse(localStorage.getItem('currentUser'))?.tiktokID}`,
     },
-    {
-        icon: <FontAwesomeIcon icon={faBookmark} />,
-        title: 'Yêu thích',
-        to: '/@tuanhoanguttk72',
-    },
+
     {
         icon: <FontAwesomeIcon icon={faVideo} />,
         title: 'LIVE Studio',

@@ -5,13 +5,11 @@ const getListVideos = async (page = 1, limit = 5) => {
     return res;
 };
 
-const getVideosProfile = async (userId, viewable, page = 1, limit = 5) => {
-    let res;
-    if (viewable) {
-        res = await request.get(`/videos/${userId}/profile?page=${page}&limit=${limit}&viewable=public`);
-    } else {
-        res = await request.get(`/videos/${userId}/profile?page=${page}&limit=${limit}`);
-    }
+const getVideosProfile = async (userId, options) => {
+    const res = await request.get(`/videos/${userId}/profile`, {
+        params: options,
+    });
+
     return res;
 };
 

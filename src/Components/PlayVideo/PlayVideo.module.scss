@@ -1,7 +1,7 @@
 .wrapper {
+    display: flex;
     min-width: 520px;
     max-width: 720px;
-    display: flex;
     padding: 20px 0;
     border-bottom: 1px solid #ccc;
 }
@@ -18,9 +18,9 @@
 }
 
 .content-header {
-    height: 70px;
     display: flex;
     justify-content: space-between;
+    height: 70px;
 }
 
 .content-body {
@@ -28,11 +28,12 @@
 }
 
 .video {
-    border-radius: 10px;
-    min-width: 337.5px;
-    max-height: calc(100vh - 180px);
-    overflow: hidden;
-    margin-top: 12px;
     position: relative;
+    overflow: hidden;
+    min-width: 337.5px;
+    min-height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
+    margin-top: 12px;
     margin-right: 20px;
+    border-radius: 10px;
 }

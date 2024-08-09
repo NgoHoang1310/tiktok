@@ -2,26 +2,30 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './Button.module.scss';
 import { Link } from 'react-router-dom';
+import { forwardRef } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Button({
-    to,
-    href,
-    primary = false,
-    outline = false,
-    simple = false,
-    rounded = false,
-    small = false,
-    large = false,
-    disabled = false,
-    leftIcon = false,
-    rightIcon = false,
-    className,
-    children,
-    onClick,
-    ...passProps
-}) {
+const Button = forwardRef(function Button(
+    {
+        to,
+        href,
+        primary = false,
+        outline = false,
+        simple = false,
+        rounded = false,
+        small = false,
+        large = false,
+        disabled = false,
+        leftIcon = false,
+        rightIcon = false,
+        className,
+        children,
+        onClick,
+        ...passProps
+    },
+    ref,
+) {
     let Component = 'button';
     const classes = cx('wrapper', {
         primary,
@@ -54,13 +58,13 @@ function Button({
     }
 
     return (
-        <Component className={classes} {...props}>
+        <Component ref={ref} className={classes} {...props}>
             {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
             <span className={cx('title')}> {children}</span>
             {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
         </Component>
     );
-}
+});
 
 Button.propTypes = {
     children: PropTypes.node.isRequired,

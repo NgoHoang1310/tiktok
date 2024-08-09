@@ -15,7 +15,6 @@ function Interaction({ size = 'medium', data, className, direction = 'vertical',
         { like: data?.isLiked, favourite: data?.isFavourited },
         { like: data?.likesCount, favourite: data?.favouritesCount },
     );
-
     return (
         <div className={cx('wrapper', { [className]: className })} {...props}>
             <ul className={cx('list', direction)}>

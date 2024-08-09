@@ -16,7 +16,7 @@ import PostItem from '~/components/Comment/PostItem';
 
 const cx = classNames.bind(styles);
 
-function FullscreenVideo({ videos = [], goBack }) {
+function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
     const [state, dispatch] = useStore();
     const { currentVideo, isFullScreen, currentUser } = state;
     const [videoIndex, setVideoIndex] = useState();
@@ -73,7 +73,16 @@ function FullscreenVideo({ videos = [], goBack }) {
         <div className={cx('wrapper')}>
             <div className={cx('content', { fullscreen: isFullScreen })}>
                 <div className={cx('left')}>
-                    {<Video autoPlay ref={videoRef} className={cx('video')} video={videos[videoIndex]?.filePath} />}
+                    {
+                        <Video
+                            autoPlay={isFullScreen}
+                            customControl={isFullScreen}
+                            ref={videoRef}
+                            className={cx('video')}
+                            video={videos[videoIndex]?.filePath}
+                            preload="metadata"
+                        />
+                    }
                     <div onClick={handleCloseFullscreen} className={cx('button', 'close-btn')}>
                         <FontAwesomeIcon size={'2x'} icon={faTimes} />
                     </div>
@@ -117,16 +126,18 @@ function FullscreenVideo({ videos = [], goBack }) {
                                     <p className={cx('fs-4 ')}>{videos[videoIndex]?.userInfo?.nickName}</p>
                                 </div>
                                 <div className={cx('follow-btn')}>
-                                    <Button primary simple={follow} onClick={handleFollow}>
-                                        {follow ? 'Following' : 'Follow'}
-                                    </Button>
+                                    {!followDisable && (
+                                        <Button primary simple={follow} onClick={handleFollow}>
+                                            {follow ? 'Following' : 'Follow'}
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                             <div className={cx('video-desc__body')}>
                                 <div className={cx('video-content')}>
                                     <span>{videos[videoIndex]?.description}</span>
-                                    <a className={cx('hashtags')}>#hoang</a>
-                                    <a className={cx('hashtags')}>#hoang</a>
+                                    {/* <a className={cx('hashtags')}>#hoang</a>
+                                    <a className={cx('hashtags')}>#hoang</a> */}
                                 </div>
                                 <div className={cx('video-music')}>
                                     <span>
@@ -160,10 +171,14 @@ function FullscreenVideo({ videos = [], goBack }) {
                             <Comment video={videos[videoIndex]} />
                         </div>
                     </div>
-                    <div className={cx('break-bar')}></div>
-                    <div className={cx('comment-post')}>
-                        <PostItem videoId={videos[videoIndex]?._id} commentatorId={currentUser?._id} />
-                    </div>
+                    {videos[videoIndex]?.viewable === 'public' && (
+                        <>
+                            <div className={cx('break-bar')}></div>
+                            <div className={cx('comment-post')}>
+                                <PostItem videoId={videos[videoIndex]?._id} commentatorId={currentUser?._id} />
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
