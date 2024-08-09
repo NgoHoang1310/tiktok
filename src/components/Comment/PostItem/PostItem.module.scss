@@ -1,0 +1,35 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    gap: 8px;
+}
+
+.comment-input {
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+
+    textarea {
+        width: 100%;
+        padding: 6px 8px;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        resize: none;
+    }
+
+    span {
+        margin-right: 8px;
+    }
+}
+
+.border {
+    border-color: var(--boder-blur-color);
+}
+
+.post-btn {
+}

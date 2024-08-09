@@ -1,0 +1,74 @@
+.list {
+    height: 100%;
+    display: flex;
+    list-style: none;
+    cursor: pointer;
+}
+.item {
+    color: black;
+    text-align: center;
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(22, 24, 35, 0.06);
+        border-radius: 50%;
+        margin: 2px 0;
+    }
+    span {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: rgba(22, 24, 35, 0.75);
+    }
+}
+
+.icon.heartActive {
+    animation: Beat 0.4s ease-in-out;
+    color: var(--primary-color);
+}
+
+.icon.bookMarkActive {
+    animation: Beat 0.4s ease-in-out;
+    color: #face15;
+}
+
+.vertical {
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.horizontal {
+    flex-direction: row;
+    align-items: center;
+
+    .item {
+        display: flex;
+        align-items: center;
+        margin: 0 4px;
+
+        span {
+            padding: 0 4px;
+        }
+    }
+}
+
+.small {
+    font-size: 1.6rem;
+    width: 32px;
+    height: 32px;
+}
+
+.medium {
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
+}
+
+@keyframes Beat {
+    50% {
+        font-size: 3.2rem;
+    }
+    100% {
+        font-size: 2.4rem;
+    }
+}

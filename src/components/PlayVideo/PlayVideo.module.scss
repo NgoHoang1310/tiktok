@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    min-width: 520px;
+    max-width: 720px;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.content {
+    flex: 1;
+    margin-left: 8px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    height: 70px;
+}
+
+.content-body {
+    display: flex;
+}
+
+.video {
+    position: relative;
+    overflow: hidden;
+    min-width: 337.5px;
+    min-height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
+    margin-top: 12px;
+    margin-right: 20px;
+    border-radius: 10px;
+}

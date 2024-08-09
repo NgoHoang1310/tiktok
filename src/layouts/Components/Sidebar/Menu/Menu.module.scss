@@ -1,0 +1,38 @@
+.wrapper {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 8px 8px 0;
+    border-radius: 4px;
+    transition: background-color 200ms ease-in-out 0s;
+    font-size: 1.8rem;
+    font-weight: 700;
+
+    &:hover {
+        background-color: var(--nav-hover-color);
+    }
+
+    &.active {
+        color: var(--primary-color);
+
+        .icon {
+            display: none;
+        }
+
+        .activeIcon {
+            display: block;
+        }
+    }
+}
+
+.activeIcon {
+    display: none;
+}
+
+.title {
+    margin-left: 10px;
+}
