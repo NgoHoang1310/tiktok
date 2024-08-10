@@ -128,7 +128,7 @@ Validator.isConfirm = function (selector, getConfirmValue, message) {
     return {
         selector: selector,
         test: function (value) {
-            return value == getConfirmValue() ? undefined : message || 'Dữ liệu nhập lại không chính xác';
+            return value === getConfirmValue() ? undefined : message || 'Dữ liệu nhập lại không chính xác';
         },
     };
 };

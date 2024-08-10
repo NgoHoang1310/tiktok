@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './FullscreenVideo.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faChevronUp, faChevronDown, faMusic, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Video from '~/components/PlayVideo/Video';

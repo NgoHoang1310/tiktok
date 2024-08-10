@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './UploadFile.module.scss';
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState } from 'react';
 
 import Button from '~/components/Button';
 import { UploadIcon } from '~/components/Icons';

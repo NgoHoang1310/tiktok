@@ -8,10 +8,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import PlayVideo from '~/components/PlayVideo';
 import FullscreenVideo from '~/layouts/FullscreenVideo';
-import Loading from '~/components/PlaceHolder/Loading';
 import * as apiService from '~/services';
-import { useStore, useFollow } from '~/hooks';
-import { actions } from '~/store';
+import { useStore } from '~/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import VideoProvider from '~/hoc/Provider/VideoProvider';
@@ -20,8 +18,8 @@ export const HomeContext = createContext();
 
 const cx = classNames.bind(styles);
 function Home() {
-    const [state, dispatch] = useStore();
-    const { isLogin, isFullScreen, currentVideo, currentUser } = state;
+    const [state] = useStore();
+    const { isLogin, isFullScreen, currentVideo } = state;
     const [videos, setVideos] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -46,7 +44,7 @@ function Home() {
     //xử lí sự kiện bấm nút lên/xuống
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.code == 'ArrowDown' && !isFullScreen) {
+            if (e.code === 'ArrowDown' && !isFullScreen) {
                 e.preventDefault();
                 currentVideo.index < videos.length - 1 && currentVideo.index++;
                 playVideoRef.current[currentVideo.index]?.scrollIntoView({
@@ -55,7 +53,7 @@ function Home() {
                 });
             }
 
-            if (e.code == 'ArrowUp' && !isFullScreen) {
+            if (e.code === 'ArrowUp' && !isFullScreen) {
                 e.preventDefault();
                 currentVideo.index > 0 && currentVideo.index--;
                 playVideoRef.current[currentVideo.index]?.scrollIntoView({

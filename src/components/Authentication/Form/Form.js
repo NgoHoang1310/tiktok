@@ -98,7 +98,7 @@ function Form({ type, onLogin }) {
     return (
         <form className={cx('validation')} id="form-1">
             <div className={cx('form-validation__body')}>
-                {type == 'register' && (
+                {type === 'register' && (
                     <>
                         <div className={cx('mb-3')}>
                             <label htmlFor="formFullName" className={cx('form-label')}>
@@ -185,12 +185,12 @@ function Form({ type, onLogin }) {
                     type={'button'}
                     primary
                     large
-                    onClick={(type == 'login' && handleLogin) || (type == 'register' && handleRegister)}
+                    onClick={(type === 'login' && handleLogin) || (type === 'register' && handleRegister)}
                 >
                     {loading ? (
                         <FontAwesomeIcon className={cx('fetch-loading')} icon={faCircleNotch} />
                     ) : (
-                        (type == 'login' && 'Đăng nhập') || (type == 'register' && 'Đăng kí')
+                        (type === 'login' && 'Đăng nhập') || (type === 'register' && 'Đăng kí')
                     )}
                 </Button>
             </div>

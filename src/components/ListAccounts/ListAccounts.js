@@ -5,7 +5,6 @@ import { memo } from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import AccountItem from '~/components/ListAccounts/AccountItem';
-import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 const defaultFn = () => {};

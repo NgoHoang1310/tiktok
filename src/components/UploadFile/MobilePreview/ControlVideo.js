@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './MobilePreview.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faVolumeUp, faVolumeMute, faExpand } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { formatTime } from '~/utils/common';
 

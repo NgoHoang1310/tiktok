@@ -4,9 +4,6 @@ import { faCircleCheck, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertTimeToISO } from '~/utils/common';
-import Image from '~/components/Image';
-import Button from '~/components/Button';
-import { Link } from 'react-router-dom';
 
 import { memo } from 'react';
 

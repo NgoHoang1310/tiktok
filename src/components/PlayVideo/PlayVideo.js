@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './PlayVideo.module.scss';
 
-import { useState, useRef, useEffect, forwardRef, memo, useCallback, useContext } from 'react';
+import { useRef, forwardRef, memo, useCallback } from 'react';
 
 import Image from '~/components/Image';
 import VideoInformation from './VideoInformation';
@@ -9,8 +9,7 @@ import Video from './Video';
 import Interaction from '../Interaction';
 import Button from '../Button';
 
-import * as apiService from '~/services';
-import { useStore, useFollow, useReaction } from '~/hooks';
+import { useStore, useFollow } from '~/hooks';
 
 import { actions } from '~/store';
 import { Link } from 'react-router-dom';
@@ -58,6 +57,7 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
                             video={data?.filePath}
                             thumb={data?.thumbPath}
                             preload="metadata"
+                            autoPlay={false}
                         />
                     </div>
                     <Interaction data={data} onOpenFullscreen={handleOpenFullscreen} />

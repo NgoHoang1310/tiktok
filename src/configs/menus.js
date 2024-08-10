@@ -4,7 +4,6 @@ import {
     faKeyboard,
     faQuestion,
     faUser,
-    faBookmark,
     faVideo,
     faCog,
     faMoon,

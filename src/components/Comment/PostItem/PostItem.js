@@ -3,8 +3,7 @@ import styles from './PostItem.module.scss';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useRef, useState } from 'react';
-import { useDebounce } from '~/hooks';
+import { useEffect, useState } from 'react';
 
 import { useStore } from '~/hooks';
 import { actions } from '~/store';

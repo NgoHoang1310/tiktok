@@ -4,7 +4,7 @@ import styles from './Interaction.module.scss';
 // import { HeartIcon, CommentIcon, BookMarkIcon, ShareIcon } from '~/components/Icons';
 import { faHeart, faCommentDots, faShare, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, memo, useContext, useEffect, useMemo } from 'react';
+import { memo } from 'react';
 import { useReaction } from '~/hooks';
 
 const cx = classNames.bind(styles);

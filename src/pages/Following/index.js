@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Following.module.scss';
 
-import { useEffect, useState, useRef, createContext } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
@@ -31,14 +31,16 @@ function Following() {
             const res = await apiService.getFollowingVideos(userId, { page: page, limit: 2 });
             setLoading(false);
             pagination.current = res.pagination;
-            setVideos([...videos, ...res.data]);
+            setVideos((prev) => {
+                return [...prev, ...res.data];
+            });
         };
         currentUser?._id && fetchApi(currentUser?._id);
     }, [currentUser?._id, page]);
     //xử lí sự kiện bấm nút lên/xuống
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.code == 'ArrowDown' && !isFullScreen) {
+            if (e.code === 'ArrowDown' && !isFullScreen) {
                 e.preventDefault();
                 currentVideo.index < videos.length - 1 && currentVideo.index++;
                 playVideoRef.current[currentVideo.index]?.scrollIntoView({
@@ -47,7 +49,7 @@ function Following() {
                 });
             }
 
-            if (e.code == 'ArrowUp' && !isFullScreen) {
+            if (e.code === 'ArrowUp' && !isFullScreen) {
                 e.preventDefault();
                 currentVideo.index > 0 && currentVideo.index--;
                 playVideoRef.current[currentVideo.index]?.scrollIntoView({

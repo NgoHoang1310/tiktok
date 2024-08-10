@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { Slide, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './Toast.module.scss';

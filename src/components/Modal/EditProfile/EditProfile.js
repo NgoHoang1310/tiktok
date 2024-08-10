@@ -4,7 +4,7 @@ import styles from './EditProfile.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from '~/components/Image';
 import Button from '~/components/Button';

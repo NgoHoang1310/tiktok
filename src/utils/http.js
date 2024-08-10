@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as apiServices from '~/services';
 
 let isRefreshing = false;
 let failedQueue = [];

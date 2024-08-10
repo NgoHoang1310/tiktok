@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './Video.module.scss';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import Loading from '~/components/PlaceHolder/Loading';
 import ControlVideo from './ControlVideo';
 

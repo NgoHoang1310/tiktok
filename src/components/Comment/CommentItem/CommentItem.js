@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './CommentItem.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback } from 'react';
 import { LightHeartIcon } from '~/components/Icons';
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -11,7 +11,6 @@ import Image from '~/components/Image';
 import PostItem from '../PostItem';
 import { useStore } from '~/hooks';
 import { actions } from '~/store';
-import * as apiServices from '~/services';
 
 const defaultFn = () => {};
 

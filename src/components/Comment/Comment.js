@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
 import styles from './Comment.module.scss';
 
-import { useCallback, useEffect, useState, memo, useRef, useContext } from 'react';
+import { useCallback, useEffect, useState, memo, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { io } from 'socket.io-client';
 
 import CommentItem from './CommentItem/CommentItem';

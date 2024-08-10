@@ -156,7 +156,7 @@ function Profile() {
                             <Button
                                 ref={initialNav}
                                 data-tab="video"
-                                className={cx('nav-item', { active: lineActive == VIDEO_NAVS[0] })}
+                                className={cx('nav-item', { active: lineActive === VIDEO_NAVS[0] })}
                                 onClick={(e) => handleVideoNav(e, VIDEO_NAVS[0])}
                             >
                                 Video
@@ -164,7 +164,7 @@ function Profile() {
                             <Button
                                 data-tab="favourite"
                                 leftIcon={<LockIcon width="18px" height="18px" />}
-                                className={cx('nav-item', { active: lineActive == VIDEO_NAVS[1] })}
+                                className={cx('nav-item', { active: lineActive === VIDEO_NAVS[1] })}
                                 onClick={(e) => handleVideoNav(e, VIDEO_NAVS[1])}
                             >
                                 Yêu thích
@@ -172,7 +172,7 @@ function Profile() {
                             <Button
                                 data-tab="like"
                                 leftIcon={<LockIcon width="18px" height="18px" />}
-                                className={cx('nav-item', { active: lineActive == VIDEO_NAVS[2] })}
+                                className={cx('nav-item', { active: lineActive === VIDEO_NAVS[2] })}
                                 onClick={(e) => handleVideoNav(e, VIDEO_NAVS[2])}
                             >
                                 Đã thích

@@ -12,8 +12,6 @@ import {
     UserFollowerActiveIcon,
     UserIcon,
     UserActiveIcon,
-    UserGroupIcon,
-    UserGroupActiveIcon,
     CompassIcon,
     CompassActiveIcon,
 } from '~/components/Icons';

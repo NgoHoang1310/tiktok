@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import styles from './SocialLogin.module.scss';
-import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 

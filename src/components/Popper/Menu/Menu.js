@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from '~/components/Popper/Menu/Menu.module.scss';
 import HeadlessTippy from '@tippyjs/react/headless';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import MenuItem from './MenuItem';

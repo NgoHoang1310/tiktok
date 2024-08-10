@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, memo } from 'react';
+import { useEffect } from 'react';
 
 import { useStore } from '~/hooks';
 import { actions } from '~/store';

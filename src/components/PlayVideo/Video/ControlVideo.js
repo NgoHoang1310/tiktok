@@ -70,9 +70,14 @@ function ControlVideo({ videoRef, onLoading }) {
         const handleEnded = () => {
             setPlay(false);
         };
+        const handleOnPause = () => {
+            setPlay(false);
+        };
         videoRef.current.addEventListener('ended', handleEnded);
+        videoRef.current.addEventListener('pause', handleOnPause);
         return () => {
             videoRef.current?.removeEventListener('ended', handleEnded);
+            videoRef.current?.removeEventListener('pause', handleOnPause);
         };
     }, []);
 
@@ -113,8 +118,14 @@ function ControlVideo({ videoRef, onLoading }) {
 
     const handlePlay = () => {
         if (videoReady.current) {
-            videoRef.current?.play();
-            setPlay(true);
+            videoRef.current
+                ?.play()
+                .then(() => {
+                    setPlay(true);
+                })
+                .catch((error) => {
+                    setPlay(false);
+                });
         }
     };
 
@@ -152,7 +163,7 @@ function ControlVideo({ videoRef, onLoading }) {
     const handleVolumeChange = (event) => {
         preVolume.current = event.target.value;
         dispatch(setVolume(event.target.value));
-        if (event.target.value == 0) {
+        if (event.target.value === 0) {
             videoRef.current.muted = true;
             dispatch(actions.mute(true));
         } else {
@@ -179,7 +190,7 @@ function ControlVideo({ videoRef, onLoading }) {
                     <div className={cx('scroll-volume')}>
                         <div onClick={handleAutoScroll}>{isAutoScroll ? <AutoScrollIcon /> : <LockScrollIcon />}</div>
                         <div className={cx('scroll-volume__icon')}>
-                            {isMute || volume == 0 ? (
+                            {isMute || volume === 0 ? (
                                 <FontAwesomeIcon onClick={handleMute} icon={faVolumeMute} />
                             ) : (
                                 <FontAwesomeIcon onClick={handleMute} icon={faVolumeUp} />
