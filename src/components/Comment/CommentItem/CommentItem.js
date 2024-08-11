@@ -11,7 +11,6 @@ import Image from '~/components/Image';
 import PostItem from '../PostItem';
 import { useStore } from '~/hooks';
 import { actions } from '~/store';
-import Loading from '../../PlaceHolder/Loading';
 
 const defaultFn = () => {};
 

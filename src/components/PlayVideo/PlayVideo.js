@@ -58,7 +58,7 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
                             video={data?.filePath}
                             thumb={data?.thumbPath}
                             preload="metadata"
-                            autoPlay={true}
+                            autoPlay={false}
                         />
                     </div>
                     <Interaction data={data} onOpenFullscreen={handleOpenFullscreen} />

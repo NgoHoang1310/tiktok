@@ -25,7 +25,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     const [play, setPlay] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const videoReady = useRef(false);
+    const [videoReady, setVideoReady] = useState(false);
     const isCountedView = useRef(false);
 
     //xử lý phát video mỗi khi nằm trong viewport
@@ -54,7 +54,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
             }
             handlePause();
         };
-    }, [videoReady.current]);
+    }, [videoReady]);
 
     //xử lý set độ dài của video
     useEffect(() => {
@@ -96,11 +96,11 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     useEffect(() => {
         const element = videoRef.current;
         const handleWaiting = () => {
-            videoReady.current = false;
+            setVideoReady(false);
             onLoading(true);
         };
         const handleVideoCanplay = () => {
-            videoReady.current = true;
+            setVideoReady(true);
             onLoading(false);
         };
         if (element) {
@@ -144,20 +144,14 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
 
     //xử lí chặn phát video khi video chưa sẵn sàng để phát
     const handlePlay = () => {
-        if (videoReady.current) {
-            videoRef.current
-                ?.play()
-                .then(() => {
-                    setPlay(true);
-                })
-                .catch((error) => {
-                    setPlay(false);
-                });
+        if (videoReady) {
+            videoRef.current.play();
+            setPlay(true);
         }
     };
 
     const handlePause = () => {
-        if (videoReady.current) {
+        if (videoReady) {
             videoRef.current?.pause();
             setPlay(false);
         }
