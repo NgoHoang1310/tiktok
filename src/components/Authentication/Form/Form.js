@@ -63,6 +63,11 @@ function Form({ type, onLogin }) {
                 toast('Mật khẩu không chính xác !');
                 break;
             }
+            default: {
+                setLoading(false);
+                toast('Đã xảy ra lỗi. Vui lòng thử lại !');
+                break;
+            }
         }
     };
 
@@ -100,7 +105,7 @@ function Form({ type, onLogin }) {
             <div className={cx('form-validation__body')}>
                 {type === 'register' && (
                     <>
-                        <div className={cx('mb-3')}>
+                        <div className="mb-3">
                             <label htmlFor="formFullName" className={cx('form-label')}>
                                 Tên đầy đủ
                             </label>
@@ -115,7 +120,7 @@ function Form({ type, onLogin }) {
                             />
                             <span className={cx('form-message')}></span>
                         </div>
-                        <div className={cx('mb-3')}>
+                        <div className="mb-3">
                             <label htmlFor="formTiktokID" className={cx('form-label')}>
                                 TiktokID
                             </label>
@@ -132,7 +137,7 @@ function Form({ type, onLogin }) {
                         </div>
                     </>
                 )}
-                <div className={cx('mb-3')}>
+                <div className="mb-3">
                     <label htmlFor="formEmail" className={cx('form-label')}>
                         Email
                     </label>
@@ -147,7 +152,7 @@ function Form({ type, onLogin }) {
                     />
                     <span className={cx('form-message')}></span>
                 </div>
-                <div className={cx('mb-3')}>
+                <div className="mb-3">
                     <label htmlFor="formPassword" className={cx('form-label')}>
                         Mật khẩu
                     </label>
@@ -162,7 +167,7 @@ function Form({ type, onLogin }) {
                     />
                     <span className={cx('form-message')}></span>
                 </div>
-                <div className={cx('mb-3')}>
+                <div className="mb-3">
                     <label htmlFor="formPasswordVerification" className={cx('form-label')}>
                         Xác nhận mật khẩu
                     </label>
@@ -177,12 +182,12 @@ function Form({ type, onLogin }) {
                     />
                     <span className={cx('form-message')}></span>
                     <div className={cx('check-password')}>
-                        <input type="checkbox" className={cx('checkbox-btn mb-3')} value="off" />
+                        <input style={{ marginRight: 4 }} type="checkbox" className="checkbox-btn mt-3" value="off" />
                         Hiện mật khẩu
                     </div>
                 </div>
                 <Button
-                    type={'button'}
+                    type={'submit'}
                     primary
                     large
                     onClick={(type === 'login' && handleLogin) || (type === 'register' && handleRegister)}

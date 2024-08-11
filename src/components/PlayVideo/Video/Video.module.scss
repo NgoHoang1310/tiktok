@@ -19,6 +19,18 @@
         justify-content: center;
         align-items: center;
     }
+
+    .video-views {
+        position: absolute;
+        width: 35px;
+        z-index: 100;
+        bottom: 10px;
+        left: 8px;
+        span {
+            color: #f1f1f2;
+            margin-right: 6px;
+        }
+    }
 }
 
 .video {

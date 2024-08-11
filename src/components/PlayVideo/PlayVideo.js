@@ -52,6 +52,7 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
                 <div className={cx('content-body')}>
                     <div className={cx('video')}>
                         <Video
+                            videoId={data?._id}
                             onClick={handleOpenFullscreen}
                             ref={videoRef}
                             video={data?.filePath}

@@ -1,7 +1,7 @@
 import * as request from '~/utils';
 
-const getListVideos = async (page = 1, limit = 5) => {
-    const res = await request.get(`/videos?page=${page}&limit=${limit}`);
+const getListVideos = async (options) => {
+    const res = await request.get(`/videos`, { params: options });
     return res;
 };
 
@@ -13,8 +13,8 @@ const getVideosProfile = async (userId, options) => {
     return res;
 };
 
-const getVideosForyou = async (page = 1, limit = 5) => {
-    const res = await request.get(`/videos/foryou?page=${page}&limit=${limit}`);
+const getVideosForyou = async (options) => {
+    const res = await request.get(`/videos/foryou`, { params: options });
     return res;
 };
 
@@ -30,4 +30,9 @@ const uploadVideo = async (payload) => {
     return res.data;
 };
 
-export { getListVideos, getVideosProfile, getVideosForyou, getFollowingVideos, uploadVideo };
+const countingView = async (id) => {
+    const res = await request.patch(`videos/${id}/views`);
+    return res;
+};
+
+export { getListVideos, getVideosProfile, getVideosForyou, getFollowingVideos, uploadVideo, countingView };

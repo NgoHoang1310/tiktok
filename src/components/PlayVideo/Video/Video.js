@@ -1,20 +1,23 @@
 import classNames from 'classnames/bind';
 import styles from './Video.module.scss';
 
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import Loading from '~/components/PlaceHolder/Loading';
 import ControlVideo from './ControlVideo';
 
 import { memo, forwardRef, useEffect, useRef, useState, useCallback } from 'react';
 const cx = classNames.bind(styles);
 
-function Video({ video, customControl = true, loading = true, thumb, className, preview, ...props }, ref) {
+function Video(
+    { videoId, video, views, customControl = true, loading = true, thumb, className, preview, ...props },
+    ref,
+) {
     const videoRef = useRef();
     const [_loading, setLoading] = useState(loading);
     const mouseEnter = useRef(false);
     if (video && typeof video != 'string') {
-        video = URL.createObjectURL(video);
+        video = URL.createObjectURL();
     }
 
     const handleLoading = useCallback((value) => {
@@ -22,28 +25,29 @@ function Video({ video, customControl = true, loading = true, thumb, className, 
     }, []);
 
     useEffect(() => {
+        const element = videoRef.current;
         const handleVideoPlay = () => {
             mouseEnter.current = true;
             if (!_loading) {
-                videoRef.current.play();
+                element.play();
             }
         };
         const handleVideoPause = () => {
             mouseEnter.current = false;
             if (!_loading) {
-                videoRef.current.pause();
-                videoRef.current.currentTime = 0;
+                element.pause();
+                element.currentTime = 0;
             }
         };
-        if (videoRef.current && !customControl) {
-            videoRef.current.addEventListener('mouseenter', handleVideoPlay);
-            videoRef.current.addEventListener('mouseleave', handleVideoPause);
+        if (element && !customControl) {
+            element.addEventListener('mouseenter', handleVideoPlay);
+            element.addEventListener('mouseleave', handleVideoPause);
         }
 
         return () => {
-            if (videoRef.current) {
-                videoRef.current.removeEventListener('mouseenter', handleVideoPlay);
-                videoRef.current.removeEventListener('mouseleave', handleVideoPause);
+            if (element) {
+                element.removeEventListener('mouseenter', handleVideoPlay);
+                element.removeEventListener('mouseleave', handleVideoPause);
             }
         };
     }, [_loading]);
@@ -90,7 +94,15 @@ function Video({ video, customControl = true, loading = true, thumb, className, 
             </div>
             {customControl && (
                 <div className={cx('control')}>
-                    <ControlVideo onLoading={handleLoading} videoRef={ref || videoRef} />
+                    <ControlVideo videoId={videoId} onLoading={handleLoading} videoRef={ref || videoRef} />
+                </div>
+            )}
+            {!!views && (
+                <div className={cx('video-views')}>
+                    <span>
+                        <FontAwesomeIcon icon={faPlay} />
+                    </span>
+                    <span>{views}</span>
                 </div>
             )}
         </div>

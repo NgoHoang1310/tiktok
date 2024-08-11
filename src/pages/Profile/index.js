@@ -80,7 +80,7 @@ function Profile() {
         };
 
         fetchApi();
-    }, [tiktokID]);
+    }, [tiktokID, currentUser?._id]);
 
     useEffect(() => {
         isMe.current = profile?._id === currentUser?._id;
@@ -185,6 +185,7 @@ function Profile() {
                                     return (
                                         <div key={index} className={cx('video-item')}>
                                             <Video
+                                                views={video.viewsCount}
                                                 onClick={() => handleOpenFullscreen(index)}
                                                 customControl={false}
                                                 className={cx('video')}

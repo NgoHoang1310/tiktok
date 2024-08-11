@@ -97,20 +97,6 @@ function Comment({ video }) {
                     [commentId]: res.data,
                 };
             });
-            // setComments((prevComments) => {
-            //     let commentIndex = comments.findIndex((comment) => comment._id == commentId);
-
-            //     if (commentIndex !== -1) {
-            //         const newComments = [...prevComments];
-            //         newComments[commentIndex] = {
-            //             ...newComments[commentIndex],
-            //             replies: [...newComments[commentIndex].replies, res.data],
-            //         };
-            //         return newComments;
-            //     }
-
-            //     return prevComments;
-            // });
         },
         [replies, video],
     );
@@ -120,7 +106,7 @@ function Comment({ video }) {
 
     return (
         <div className={cx('wrapper')}>
-            {video?.viewable === 'public' ? (
+            {video?.viewable === 'public' && video?.allows.includes('comment') ? (
                 !!comments.length ? (
                     <InfiniteScroll
                         dataLength={comments.length}

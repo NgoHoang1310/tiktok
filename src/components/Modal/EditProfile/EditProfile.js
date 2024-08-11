@@ -19,11 +19,17 @@ function EditProfile({ onSetModal, data }) {
     const [avatar, setAvatar] = useState('');
     const [isChanged, setIsChanged] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [wordsCount, setWordsCount] = useState(data.bio.length);
+    const [isExceeded, setIsExceeded] = useState(false);
 
     const handleInputChange = (e, callback) => {
+        setIsExceeded(false);
+        if (e.target.value.length > 80) {
+            setIsExceeded(true);
+        }
+        setWordsCount(e.target.value.length);
         callback(e.target.value);
     };
-    console.log(data._id);
 
     const handleSubmit = async () => {
         const updateProfile = {};
@@ -37,7 +43,9 @@ function EditProfile({ onSetModal, data }) {
         if (res.status === 200) {
             setLoading(false);
             toast('Cập nhập thành công !');
-            window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+            }, 800);
         }
     };
 
@@ -126,9 +134,9 @@ function EditProfile({ onSetModal, data }) {
                             onChange={(e) => handleInputChange(e, setBio)}
                             value={bio}
                             spellCheck={false}
-                            className={cx('area-text')}
+                            className={cx('area-text', { ['danger-border']: isExceeded })}
                         ></textarea>
-                        <p className={cx('notice-label', 'mt-3')}>0/80</p>
+                        <p className={cx('notice-label', 'mt-3')}>{wordsCount}/80</p>
                     </div>
                 </div>
             </div>
@@ -137,7 +145,7 @@ function EditProfile({ onSetModal, data }) {
                 <Button onClick={() => onSetModal(false)} simple>
                     Hủy
                 </Button>
-                <Button onClick={handleSubmit} primary disabled={!isChanged}>
+                <Button onClick={handleSubmit} primary disabled={isExceeded || !isChanged}>
                     {loading ? <FontAwesomeIcon className={cx('fetch-loading')} icon={faCircleNotch} /> : 'Lưu'}
                 </Button>
             </div>

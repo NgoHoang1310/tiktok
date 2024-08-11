@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 function Validator(options) {
     //lấy thẻ cha
     function getParent(element, selector) {
-        while (element.parentElement) {
+        while (element?.parentElement) {
             if (element.parentElement.matches(selector)) {
                 return element.parentElement;
             }
@@ -21,7 +21,7 @@ function Validator(options) {
         var errorMessage;
         var getMessage = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
         for (var i = 0; i < rules.length; i++) {
-            errorMessage = rules[i](inputElement.value);
+            errorMessage = rules[i](inputElement?.value);
             if (errorMessage) break;
         }
         if (errorMessage) {
@@ -46,9 +46,11 @@ function Validator(options) {
             var isFormValid = true;
             options.rules.forEach(function (rule) {
                 var inputElement = getElementForm.querySelector(rule.selector);
-                var isValid = validate(inputElement, rule);
-                if (!isValid) {
-                    isFormValid = false;
+                if (inputElement) {
+                    var isValid = validate(inputElement, rule);
+                    if (!isValid) {
+                        isFormValid = false;
+                    }
                 }
             });
 

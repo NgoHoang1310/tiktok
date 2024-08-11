@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Video.module.scss';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, memo, useRef, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
@@ -14,8 +14,10 @@ import { useStore } from '~/hooks';
 import { actions } from '~/store';
 import { setVolume } from '~/store/actions';
 
+import * as apiServices from '~/services';
+
 const cx = classNames.bind(styles);
-function ControlVideo({ videoRef, onLoading }) {
+function ControlVideo({ videoId, videoRef, onLoading }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
     const [state, dispatch] = useStore();
@@ -24,8 +26,11 @@ function ControlVideo({ videoRef, onLoading }) {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const videoReady = useRef(false);
+    const isCountedView = useRef(false);
+
     //xử lý phát video mỗi khi nằm trong viewport
     useEffect(() => {
+        const element = videoRef.current;
         const handleIntersection = (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -39,13 +44,13 @@ function ControlVideo({ videoRef, onLoading }) {
             threshold: 0.7,
         });
 
-        if (videoRef.current) {
-            observer.observe(videoRef.current);
+        if (element) {
+            observer.observe(element);
         }
 
         return () => {
-            if (videoRef.current) {
-                observer.unobserve(videoRef.current);
+            if (element) {
+                observer.unobserve(element);
             }
             handlePause();
         };
@@ -53,31 +58,29 @@ function ControlVideo({ videoRef, onLoading }) {
 
     //xử lý set độ dài của video
     useEffect(() => {
+        const element = videoRef.current;
         const handleSetDuration = () => {
-            setDuration(videoRef.current?.duration);
+            setDuration(element?.duration);
         };
 
-        videoRef.current.addEventListener('loadedmetadata', handleSetDuration);
+        element.addEventListener('loadedmetadata', handleSetDuration);
         const interval = setInterval(handleTimeUpdate, 1000);
 
         return () => {
             clearInterval(interval);
-            videoRef.current?.removeEventListener('loadedmetadata', handleSetDuration);
+            element?.removeEventListener('loadedmetadata', handleSetDuration);
         };
     }, []);
     //xử lý khi video kết thúc
     useEffect(() => {
+        const element = videoRef.current;
         const handleEnded = () => {
             setPlay(false);
         };
-        const handleOnPause = () => {
-            setPlay(false);
-        };
-        videoRef.current.addEventListener('ended', handleEnded);
-        videoRef.current.addEventListener('pause', handleOnPause);
+
+        element.addEventListener('ended', handleEnded);
         return () => {
-            videoRef.current?.removeEventListener('ended', handleEnded);
-            videoRef.current?.removeEventListener('pause', handleOnPause);
+            element?.removeEventListener('ended', handleEnded);
         };
     }, []);
 
@@ -91,6 +94,7 @@ function ControlVideo({ videoRef, onLoading }) {
     }, [volume]);
 
     useEffect(() => {
+        const element = videoRef.current;
         const handleWaiting = () => {
             videoReady.current = false;
             onLoading(true);
@@ -99,23 +103,46 @@ function ControlVideo({ videoRef, onLoading }) {
             videoReady.current = true;
             onLoading(false);
         };
-        if (videoRef.current) {
-            videoRef.current.addEventListener('waiting', handleWaiting);
-            videoRef.current.addEventListener('canplay', handleVideoCanplay);
-            videoRef.current.addEventListener('playing', handleVideoCanplay);
+        if (element) {
+            element.addEventListener('waiting', handleWaiting);
+            element.addEventListener('canplay', handleVideoCanplay);
+            element.addEventListener('playing', handleVideoCanplay);
         }
 
         return () => {
-            if (videoRef.current) {
-                videoRef.current.removeEventListener('waiting', handleWaiting);
-                videoRef.current.removeEventListener('canplay', handleVideoCanplay);
-                videoRef.current.removeEventListener('playing', handleVideoCanplay);
+            if (element) {
+                element.removeEventListener('waiting', handleWaiting);
+                element.removeEventListener('canplay', handleVideoCanplay);
+                element.removeEventListener('playing', handleVideoCanplay);
             }
         };
     }, []);
 
-    //xử lí chặn phát video khi video chưa sẵn sàng để phát
+    //xử lí đếm lượt xem của video
+    useEffect(() => {
+        const element = videoRef.current;
+        const handleCountingView = async () => {
+            let shouldCountView = play && element.currentTime > 10 && !isCountedView.current && videoId;
+            if (shouldCountView) {
+                let res = await apiServices.countingView(videoId);
+                if (res?.status !== 200 && Object.keys(res?.data) === 0) return;
+                isCountedView.current = true;
+                element.removeEventListener('timeupdate', handleCountingView);
+            }
+        };
 
+        if (element) {
+            element.addEventListener('timeupdate', handleCountingView);
+        }
+
+        return () => {
+            if (element) {
+                element.removeEventListener('timeupdate', handleCountingView);
+            }
+        };
+    }, [play]);
+
+    //xử lí chặn phát video khi video chưa sẵn sàng để phát
     const handlePlay = () => {
         if (videoReady.current) {
             videoRef.current
@@ -236,4 +263,4 @@ function ControlVideo({ videoRef, onLoading }) {
     );
 }
 
-export default ControlVideo;
+export default memo(ControlVideo);

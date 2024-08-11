@@ -14,12 +14,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import VideoProvider from '~/hoc/Provider/VideoProvider';
 
-export const HomeContext = createContext();
-
 const cx = classNames.bind(styles);
 function Home() {
     const [state] = useStore();
-    const { isLogin, isFullScreen, currentVideo } = state;
+    const { isLogin, isFullScreen, currentVideo, initialize } = state;
     const [videos, setVideos] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -30,9 +28,9 @@ function Home() {
         const fetchApi = async () => {
             let res = [];
             if (isLogin) {
-                res = await apiService.getVideosForyou(page, 2);
+                res = await apiService.getVideosForyou({ page: page, limit: 2, sort: 'viewsCount' });
             } else {
-                res = await apiService.getListVideos(page, 2);
+                res = await apiService.getListVideos({ page: page, limit: 2, sort: 'viewsCount' });
             }
             setLoading(false);
             pagination.current = res.pagination;

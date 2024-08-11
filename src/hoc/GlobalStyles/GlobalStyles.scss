@@ -2,23 +2,23 @@
 
 @font-face {
     font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Regular.woff2');
     font-weight: 400;
+    src: url('/assets/fonts/TikTokFont-Regular.woff2');
 }
 @font-face {
     font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Semibold.woff2');
     font-weight: 600;
+    src: url('/assets/fonts/TikTokFont-Semibold.woff2');
 }
 @font-face {
     font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Bold.woff2');
     font-weight: 700;
+    src: url('/assets/fonts/TikTokFont-Bold.woff2');
 }
 @font-face {
     font-family: TikTokDisplayFont;
-    src: url('/assets/fonts/TikTokDisplayFont-Bold.woff2');
     font-weight: 700;
+    src: url('/assets/fonts/TikTokDisplayFont-Bold.woff2');
 }
 
 @keyframes spinner {
@@ -48,8 +48,8 @@ html {
 //scrollbar
 
 html ::-webkit-scrollbar {
-    border-radius: 0px;
     width: 8px;
+    border-radius: 0px;
 }
 
 html *::-webkit-scrollbar-thumb {
@@ -68,22 +68,22 @@ body {
     text-rendering: optimizeSpeed;
 
     * {
-        margin: 0;
-        padding: 0;
         box-sizing: border-box;
+        padding: 0;
+        margin: 0;
     }
 }
 
 button,
 input {
-    outline: none;
     border: none;
+    outline: none;
     background-color: transparent;
     font-weight: 600;
 }
 a[href] {
-    text-decoration: none;
     color: black;
+    text-decoration: none;
 }
 //loading animation
 .fetch-loading {
@@ -94,10 +94,10 @@ a[href] {
 
 body {
     .tippy-box {
-        font-size: 1.6rem;
-        padding: 4px 4px;
         line-height: 21px;
+        padding: 4px 4px;
         background-color: rgba(84, 84, 84, 0.92);
+        font-size: 1.6rem;
     }
 
     .firebase-emulator-warning {
@@ -105,24 +105,28 @@ body {
     }
 
     .break-bar {
-        height: 1px;
         width: 100%;
-        background-color: var(--boder-blur-color);
+        height: 1px;
         margin: 4px 0;
+        background-color: var(--boder-blur-color);
     }
 
     .hashtags {
+        margin-right: 4px;
         color: rgb(43, 93, 185);
         font-weight: 600;
-        margin-right: 4px;
     }
 
     .line {
         position: absolute;
+        bottom: 0;
         width: 100px;
         height: 2px;
-        bottom: 0;
         background-color: black;
         transition: all 0.2s ease;
+    }
+
+    .danger-border {
+        border: 1px solid red !important;
     }
 }
