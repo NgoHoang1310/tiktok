@@ -1,10 +1,13 @@
-$animation-duration: 1200ms;
+$animation-duration: 800ms;
 
 $size: 20px;
+$blend: lighten;
 
-@mixin set-size($s) {
+@mixin set-size($s, $b) {
     $size: $s;
+    $blend: $b;
     width: $size !important;
+    mix-blend-mode: $blend !important;
 }
 
 .wrapper {
@@ -19,6 +22,7 @@ $size: 20px;
         width: $size;
         margin: 0;
         border-radius: 50%;
+        mix-blend-mode: $blend;
         aspect-ratio: 1;
     }
 
@@ -28,37 +32,81 @@ $size: 20px;
     }
 
     .circle:nth-child(2) {
-        margin-left: -5px;
         background: #25f4ee;
         animation: counter-clockwise $animation-duration infinite linear;
     }
 }
 
-.small {
-    @include set-size(10px);
-}
-
 @keyframes clockwise {
     0% {
-        width: $size;
-        transform: translateX(0);
+        left: 0;
     }
-
     25% {
-        width: calc($size + 5px);
+        transform: scale(1.2);
     }
-
     50% {
-        width: $size;
-        transform: translateX(100%);
+        left: $size;
+    }
+    75% {
+        transform: scale(0.8);
+    }
+    100% {
+        left: 0;
     }
 }
 
 @keyframes counter-clockwise {
     0% {
-        transform: translateX(0);
+        right: 0;
+    }
+    25% {
+        transform: scale(0.8);
     }
     50% {
-        transform: translateX(-100%);
+        right: $size;
+    }
+    75% {
+        transform: scale(1.2);
+    }
+    100% {
+        right: 0;
+    }
+}
+.small {
+    @include set-size(10px, darken);
+    @keyframes clockwise {
+        0% {
+            left: 0;
+        }
+        25% {
+            transform: scale(1.2);
+        }
+        50% {
+            left: 10px;
+        }
+        75% {
+            transform: scale(0.8);
+        }
+        100% {
+            left: 0;
+        }
+    }
+
+    @keyframes counter-clockwise {
+        0% {
+            right: 0;
+        }
+        25% {
+            transform: scale(0.8);
+        }
+        50% {
+            right: 10px;
+        }
+        75% {
+            transform: scale(1.2);
+        }
+        100% {
+            right: 0;
+        }
     }
 }

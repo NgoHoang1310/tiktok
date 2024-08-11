@@ -38,15 +38,19 @@ function EditProfile({ onSetModal, data }) {
         if (bio) updateProfile.bio = bio;
         if (tiktokID) updateProfile.tiktokID = tiktokID;
         if (nickName) updateProfile.nickName = nickName;
+
         const res = await apiService.updateProfile(data._id, updateProfile);
 
-        if (res.status === 200) {
+        if (res.status === 200 && Object.keys(res.data).length !== 0) {
             setLoading(false);
             toast('Cập nhập thành công !');
             setTimeout(() => {
                 window.location.reload();
             }, 800);
+            return;
         }
+        setLoading(false);
+        toast('Có lỗi xảy ra. Vui lòng thử lại !');
     };
 
     const handleChangeAvatar = (e) => {
