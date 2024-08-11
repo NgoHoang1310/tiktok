@@ -5,8 +5,15 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function MenuItem({ data, onClick }) {
+    console.log(JSON.parse(localStorage.getItem('currentUser'))?.tiktokID);
+
     return (
-        <Button className={cx('item', { separate: data.separate })} to={data.to} leftIcon={data.icon} onClick={onClick}>
+        <Button
+            className={cx('item', { separate: data.separate })}
+            to={data.to ? data.to : `/@${JSON.parse(localStorage.getItem('currentUser'))?.tiktokID}`}
+            leftIcon={data.icon}
+            onClick={onClick}
+        >
             {data.title}
         </Button>
     );

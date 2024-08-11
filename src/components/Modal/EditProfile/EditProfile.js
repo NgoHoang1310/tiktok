@@ -19,7 +19,9 @@ function EditProfile({ onSetModal, data }) {
     const [avatar, setAvatar] = useState('');
     const [isChanged, setIsChanged] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [wordsCount, setWordsCount] = useState(data.bio.length);
+    const [wordsCount, setWordsCount] = useState(() => {
+        return data.bio ? data.bio.length : 0;
+    });
     const [isExceeded, setIsExceeded] = useState(false);
 
     const handleInputChange = (e, callback) => {

@@ -121,11 +121,6 @@ function Comment({ video }) {
                         }
                         hasMore={paginationComment.current?.hasNextPage}
                         scrollableTarget="scrollableComment"
-                        loader={
-                            <h4 style={{ textAlign: 'center' }}>
-                                <Loading size={'small'} />
-                            </h4>
-                        }
                         endMessage={
                             <p style={{ textAlign: 'center' }}>
                                 <b>

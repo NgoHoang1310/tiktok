@@ -1,17 +1,15 @@
 $animation-duration: 800ms;
 
 $size: 20px;
-$blend: lighten;
 
-@mixin set-size($s, $b) {
+@mixin set-size($s) {
     $size: $s;
-    $blend: $b;
     width: $size !important;
-    mix-blend-mode: $blend !important;
 }
 
 .wrapper {
     display: flex;
+    // overflow-x: hidden;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -22,7 +20,7 @@ $blend: lighten;
         width: $size;
         margin: 0;
         border-radius: 50%;
-        mix-blend-mode: $blend;
+        mix-blend-mode: lighten;
         aspect-ratio: 1;
     }
 
@@ -73,40 +71,5 @@ $blend: lighten;
     }
 }
 .small {
-    @include set-size(10px, darken);
-    @keyframes clockwise {
-        0% {
-            left: 0;
-        }
-        25% {
-            transform: scale(1.2);
-        }
-        50% {
-            left: 10px;
-        }
-        75% {
-            transform: scale(0.8);
-        }
-        100% {
-            left: 0;
-        }
-    }
-
-    @keyframes counter-clockwise {
-        0% {
-            right: 0;
-        }
-        25% {
-            transform: scale(0.8);
-        }
-        50% {
-            right: 10px;
-        }
-        75% {
-            transform: scale(1.2);
-        }
-        100% {
-            right: 0;
-        }
-    }
+    @include set-size(10px);
 }

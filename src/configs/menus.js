@@ -78,7 +78,6 @@ const menuUser = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'Xem hồ sơ',
-        to: `/@${JSON.parse(localStorage.getItem('currentUser'))?.tiktokID}`,
     },
 
     {

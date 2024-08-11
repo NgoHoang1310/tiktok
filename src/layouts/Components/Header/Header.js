@@ -31,8 +31,7 @@ function Header() {
             const token = JSON.parse(localStorage.getItem('token'));
             const res = await apiServices.logout(token?.refreshToken);
             if (res?.message === 'Log out successfully !') {
-                localStorage.removeItem('token');
-                localStorage.removeItem('isLogin');
+                localStorage.clear();
                 dispatch(actions.userLogOut());
                 window.location.reload();
             }
