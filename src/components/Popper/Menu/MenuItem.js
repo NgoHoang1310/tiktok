@@ -5,8 +5,6 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function MenuItem({ data, onClick }) {
-    console.log(JSON.parse(localStorage.getItem('currentUser'))?.tiktokID);
-
     return (
         <Button
             className={cx('item', { separate: data.separate })}

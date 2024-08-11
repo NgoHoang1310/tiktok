@@ -17,7 +17,7 @@ function Video(
     const [_loading, setLoading] = useState(loading);
     const mouseEnter = useRef(false);
     if (video && typeof video != 'string') {
-        video = URL.createObjectURL();
+        video = URL.createObjectURL(video);
     }
 
     const handleLoading = useCallback((value) => {
