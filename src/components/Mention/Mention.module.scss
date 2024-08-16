@@ -1,0 +1,26 @@
+.mention-wrapper {
+    position: absolute;
+    z-index: 1;
+    top: -9999px;
+    left: -9999px;
+    width: 100;
+    padding: 3px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.mention-item {
+    position: relative;
+    padding: 8px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f2f2f2 !important;
+    }
+
+    span {
+        position: absolute;
+        right: 12px;
+    }
+}

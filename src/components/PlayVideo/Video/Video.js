@@ -3,6 +3,7 @@ import styles from './Video.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import numeral, { Numeral } from 'numeral';
 import Loading from '~/components/PlaceHolder/Loading';
 import ControlVideo from './ControlVideo';
 
@@ -102,7 +103,7 @@ function Video(
                     <span>
                         <FontAwesomeIcon icon={faPlay} />
                     </span>
-                    <span>{views}</span>
+                    <span>{views > 1000 ? numeral(views).format('0.0a') : views}</span>
                 </div>
             )}
         </div>

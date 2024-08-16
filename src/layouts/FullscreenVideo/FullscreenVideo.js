@@ -18,7 +18,7 @@ const cx = classNames.bind(styles);
 
 function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
     const [state, dispatch] = useStore();
-    const { currentVideo, isFullScreen, currentUser } = state;
+    const { isFullScreen, currentUser, currentVideo } = state;
     const [videoIndex, setVideoIndex] = useState();
     const [follow, handleFollow] = useFollow(
         videos[videoIndex]?.userInfo?._id,
@@ -29,8 +29,8 @@ function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
 
     const handleCloseFullscreen = () => {
         let currentTime = videoRef.current?.currentTime;
-        dispatch(actions.setFullscreen(false));
         dispatch(actions.setCurrentVideo({ index: videoIndex, currentTime: currentTime }));
+        dispatch(actions.setFullscreen(false));
         navigate(goBack);
     };
 
@@ -81,6 +81,7 @@ function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
                             className={cx('video')}
                             video={videos[videoIndex]?.filePath}
                             preload="metadata"
+                            loop={true}
                         />
                     }
                     <div onClick={handleCloseFullscreen} className={cx('button', 'close-btn')}>
@@ -126,24 +127,28 @@ function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
                                     <p className={cx('fs-4 ')}>{videos[videoIndex]?.userInfo?.nickName}</p>
                                 </div>
                                 <div className={cx('follow-btn')}>
-                                    {!followDisable && (
-                                        <Button primary simple={follow} onClick={handleFollow}>
-                                            {follow ? 'Following' : 'Follow'}
-                                        </Button>
-                                    )}
+                                    {!followDisable &&
+                                        (videos[videoIndex]?.userInfo?._id === currentUser?._id ? (
+                                            <Button outline simple>
+                                                You
+                                            </Button>
+                                        ) : (
+                                            <Button primary simple={follow} onClick={handleFollow}>
+                                                {follow ? 'Following' : 'Follow'}
+                                            </Button>
+                                        ))}
                                 </div>
                             </div>
                             <div className={cx('video-desc__body')}>
-                                <div className={cx('video-content')}>
-                                    <span>{videos[videoIndex]?.description}</span>
-                                    {/* <a className={cx('hashtags')}>#hoang</a>
-                                    <a className={cx('hashtags')}>#hoang</a> */}
-                                </div>
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: videos[videoIndex]?.description }}
+                                    className={cx('video-content')}
+                                ></div>
                                 <div className={cx('video-music')}>
                                     <span>
                                         <FontAwesomeIcon icon={faMusic} />
                                     </span>
-                                    <a>Nhạc gốc</a>
+                                    <a>{videos[videoIndex]?.music}</a>
                                 </div>
                             </div>
                         </div>

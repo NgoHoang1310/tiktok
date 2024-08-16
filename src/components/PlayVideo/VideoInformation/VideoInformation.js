@@ -21,12 +21,7 @@ function VideoInformation({ data }) {
                     <h4 className={cx('name')}>{data?.userInfo?.nickName}</h4>
                     <span className={cx('date')}>{convertTimeToISO(data?.createdAt)}</span>
                 </div>
-                <div className={cx('title')}>
-                    {data?.description}
-                    <a className={cx('hashtags')}>
-                        {/* #calisthenics_master #calisthenics_VietNam #metub #vantoi #calisthenics */}
-                    </a>
-                </div>
+                <div dangerouslySetInnerHTML={{ __html: data?.description }} className={cx('title')}></div>
                 <div className={cx('music')}>
                     <span>
                         <FontAwesomeIcon icon={faMusic} />

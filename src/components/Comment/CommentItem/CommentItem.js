@@ -24,6 +24,7 @@ function CommentItem({
     repliesCount,
     currentReplyId,
     videoId,
+    ownerVideoId,
     isReply = false,
     showLoadReplies = true,
     showReplyEditor = false,
@@ -46,7 +47,10 @@ function CommentItem({
                 <div className={cx('info')}>
                     <Image src={commentator?.avatar} className={cx('avatar')} />
                     <div className={cx('sub-content')}>
-                        <strong className={cx('user-name')}>{commentator?.tiktokID}</strong>
+                        <strong className={cx('user-name')}>
+                            {commentator?.tiktokID}
+                            {commentator?._id === ownerVideoId && <span className={cx('author')}>Tác giả</span>}
+                        </strong>
                         <p className={cx('comment-content')} dangerouslySetInnerHTML={{ __html: content }}></p>
                         <div className={cx('action')}>
                             <span className={cx('main-text')}>{moment(time).locale('vi').fromNow()}</span>

@@ -114,7 +114,22 @@ body {
     .hashtags {
         margin-right: 4px;
         color: rgb(43, 93, 185);
+        font-size: 1.6rem;
         font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .users {
+        display: inline-block;
+        padding: 3px 3px 2px;
+        margin: 0 1px;
+        border-radius: 4px;
+        background-color: #eee;
+        vertical-align: baseline;
+        font-size: 0.9em;
     }
 
     .line {

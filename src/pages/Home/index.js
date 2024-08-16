@@ -1,12 +1,14 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import PlayVideo from '~/components/PlayVideo';
+import Loading from '~/components/PlaceHolder/Loading';
+
 import FullscreenVideo from '~/layouts/FullscreenVideo';
 import * as apiService from '~/services';
 import { useStore } from '~/hooks';
@@ -28,9 +30,9 @@ function Home() {
         const fetchApi = async () => {
             let res = [];
             if (isLogin) {
-                res = await apiService.getVideosForyou({ page: page, limit: 2, sort: 'viewsCount' });
+                res = await apiService.getVideosForyou({ page: page, limit: 5, sort: 'viewsCount' });
             } else {
-                res = await apiService.getListVideos({ page: page, limit: 2, sort: 'viewsCount' });
+                res = await apiService.getListVideos({ page: page, limit: 5, sort: 'viewsCount' });
             }
             setLoading(false);
             pagination.current = res.pagination;
@@ -92,13 +94,20 @@ function Home() {
                                 return prev;
                             })
                         }
+                        loader={
+                            <p style={{ textAlign: 'center', marginTop: 4 }}>
+                                <Loading style={{ mixBlendMode: 'darken' }} />
+                            </p>
+                        }
                         hasMore={pagination.current?.hasNextPage}
                         endMessage={
-                            <p style={{ textAlign: 'center' }}>
-                                <b>
-                                    Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                                </b>
-                            </p>
+                            !!videos.length && (
+                                <p style={{ textAlign: 'center' }}>
+                                    <b>
+                                        Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                    </b>
+                                </p>
+                            )
                         }
                     >
                         {loading ? (

@@ -2,6 +2,7 @@ import { createContext, useState } from 'react';
 export const VideoContext = createContext();
 
 function VideoProvider({ children }) {
+    const [currentVideo, setCurrentVideo] = useState({ index: 0, currentTime: 0 });
     const [follow, setFollow] = useState({});
     const [reactions, setReactions] = useState({});
     const [reactionsCount, setReactionsCount] = useState({});
@@ -13,6 +14,8 @@ function VideoProvider({ children }) {
         setReactions,
         reactionsCount,
         setReactionsCount,
+        currentVideo,
+        setCurrentVideo,
     };
     return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 }

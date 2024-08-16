@@ -24,7 +24,12 @@ const getFollowingVideos = async (userId, options = { page: 1, limit: 3 }) => {
     });
     return res;
 };
-
+const getDiscoverVideos = async (options) => {
+    const res = await request.get(`/videos/discover`, {
+        params: options,
+    });
+    return res;
+};
 const uploadVideo = async (payload) => {
     const res = await request.post('/videos/upload', payload, { contentType: 'multipart/form-data' });
     return res.data;
@@ -35,4 +40,12 @@ const countingView = async (id) => {
     return res;
 };
 
-export { getListVideos, getVideosProfile, getVideosForyou, getFollowingVideos, uploadVideo, countingView };
+export {
+    getListVideos,
+    getVideosProfile,
+    getVideosForyou,
+    getFollowingVideos,
+    getDiscoverVideos,
+    uploadVideo,
+    countingView,
+};

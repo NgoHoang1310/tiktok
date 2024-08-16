@@ -118,6 +118,12 @@
 
 .video-info {
     margin-bottom: 24px;
+    position: relative;
+    .title-input {
+        border: 1px solid var(--boder-blur-color);
+        padding: 10px 8px;
+        border-radius: 5px;
+    }
 }
 
 .title {

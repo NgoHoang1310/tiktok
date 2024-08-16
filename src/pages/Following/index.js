@@ -14,6 +14,7 @@ import { useStore } from '~/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import VideoProvider from '~/hoc/Provider/VideoProvider';
+import Loading from '~/components/PlaceHolder/Loading';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,7 @@ function Following() {
 
     useEffect(() => {
         const fetchApi = async (userId) => {
-            const res = await apiService.getFollowingVideos(userId, { page: page, limit: 2 });
+            const res = await apiService.getFollowingVideos(userId, { page: page, limit: 5 });
             setLoading(false);
             pagination.current = res.pagination;
             setVideos((prev) => {
@@ -90,7 +91,12 @@ function Following() {
                                 return prev;
                             })
                         }
-                        hasMore={true}
+                        loader={
+                            <p style={{ textAlign: 'center', marginTop: 4 }}>
+                                <Loading style={{ mixBlendMode: 'darken' }} />
+                            </p>
+                        }
+                        hasMore={pagination.current?.hasNextPage}
                         endMessage={
                             <p style={{ textAlign: 'center' }}>
                                 <b>

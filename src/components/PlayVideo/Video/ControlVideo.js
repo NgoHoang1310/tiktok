@@ -21,7 +21,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
     const [state, dispatch] = useStore();
-    const { isAutoScroll, isMute, volume } = state;
+    const { isAutoScroll, isMute, volume, currentVideo, isFullScreen } = state;
     const [play, setPlay] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -40,6 +40,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
                 }
             });
         };
+
         const observer = new IntersectionObserver(handleIntersection, {
             threshold: 0.7,
         });
@@ -71,6 +72,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
             element?.removeEventListener('loadedmetadata', handleSetDuration);
         };
     }, []);
+
     //xử lý khi video kết thúc
     useEffect(() => {
         const element = videoRef.current;
@@ -96,13 +98,20 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     useEffect(() => {
         const element = videoRef.current;
         const handleWaiting = () => {
+            console.log('waiting');
+
             setVideoReady(false);
             onLoading(true);
         };
         const handleVideoCanplay = () => {
+            console.log('canplay');
+
             setVideoReady(true);
             onLoading(false);
         };
+
+        console.log('listen');
+
         if (element) {
             element.addEventListener('waiting', handleWaiting);
             element.addEventListener('canplay', handleVideoCanplay);
@@ -117,16 +126,16 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
             }
         };
     }, []);
-
     //xử lí đếm lượt xem của video
     useEffect(() => {
         const element = videoRef.current;
         const handleCountingView = async () => {
             let shouldCountView = play && element.currentTime > 10 && !isCountedView.current && videoId;
             if (shouldCountView) {
+                isCountedView.current = true;
                 let res = await apiServices.countingView(videoId);
                 if (res?.status !== 200 && Object.keys(res?.data) === 0) return;
-                isCountedView.current = true;
+                console.log('count');
                 element.removeEventListener('timeupdate', handleCountingView);
             }
         };
@@ -145,8 +154,14 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     //xử lí chặn phát video khi video chưa sẵn sàng để phát
     const handlePlay = () => {
         if (videoReady) {
-            videoRef.current.play();
-            setPlay(true);
+            videoRef.current
+                .play()
+                .then(() => {
+                    setPlay(true);
+                })
+                .catch(() => {
+                    setPlay(false);
+                });
         }
     };
 
@@ -230,7 +245,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
                         </div>
                     </div>
                 </div>
-                {duration >= 60 && (
+                {duration >= 45 && (
                     <div className={cx('video-progress')}>
                         <Slider
                             aria-label="Small"

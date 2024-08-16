@@ -142,6 +142,7 @@ function Comment({ video }) {
                                         time={comment.createdAt}
                                         currentReplyId={currentReplyId}
                                         videoId={comment.videoId}
+                                        ownerVideoId={video?.userId}
                                         replies={replies[comment._id]}
                                         showLoadReplies={showLoadReplies}
                                         showReplyEditor={currentReplyId === comment._id}

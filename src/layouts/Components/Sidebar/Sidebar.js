@@ -18,6 +18,7 @@ import {
 import ListAccounts from '~/components/ListAccounts';
 import Login from '~/layouts/Components/Sidebar/Login';
 import Footer from '~/layouts/Components/Sidebar/Footer';
+import Image from '~/components/Image';
 import { useStore } from '~/hooks';
 import { useCallback, useEffect, useState, useRef } from 'react';
 
@@ -82,8 +83,26 @@ function Sidebar() {
                 />
                 <MenuItem
                     title="Hồ sơ"
-                    icon={<UserIcon />}
-                    activeIcon={<UserActiveIcon />}
+                    icon={
+                        isLogin ? (
+                            <Image
+                                src={currentUser?.avatar}
+                                style={{ width: 32, height: 32, borderRadius: '50%', padding: 4 }}
+                            />
+                        ) : (
+                            <UserIcon />
+                        )
+                    }
+                    activeIcon={
+                        isLogin ? (
+                            <Image
+                                src={currentUser?.avatar}
+                                style={{ width: 32, height: 32, borderRadius: '50%', padding: 4 }}
+                            />
+                        ) : (
+                            <UserActiveIcon />
+                        )
+                    }
                     to={`/@${currentUser?.tiktokID}`}
                     requireAuth
                 />

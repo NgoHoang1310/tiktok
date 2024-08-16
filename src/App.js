@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Fragment, useEffect } from 'react';
-
+import { Fragment } from 'react';
 import { AuthGuard } from './hoc/Guard';
 import { privateRoutes, publicRoutes } from './routes';
 import { DefaultLayout } from './layouts';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
     function renderRoute(route, index, isPrivate = false) {
@@ -31,6 +31,7 @@ function App() {
     return (
         <Router>
             <div className="App">
+                <ScrollToTop />
                 <Routes>
                     {publicRoutes.map((route, index) => renderRoute(route, index))}
                     {privateRoutes.map((route, index) => renderRoute(route, index, true))}

@@ -9,14 +9,16 @@ import Sidebar from '~/layouts/Components/Sidebar';
 import Authentication from '~/components/Authentication';
 import Toast from '~/components/Toast';
 import { StoreContext, actions } from '~/store';
+import { useScrollToTop } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
     const [state, dispatch] = useContext(StoreContext);
     const { showModal } = state;
+    // useScrollToTop();
     return (
-        <div className="wrapper">
+        <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
                 <Sidebar />

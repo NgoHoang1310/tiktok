@@ -4,17 +4,19 @@ import PropTypes from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-function Input({ type, title, value, onInput }) {
+function Input({ type, title, value, onChange, disabled = false, ...props }) {
     return (
         <div className={cx('wrapper')}>
             <label className={cx('title')}>{title}</label>
             <div className={cx('input')}>
                 <input
+                    disabled={disabled}
                     type={type}
                     value={value}
-                    onInput={(e) => {
-                        onInput(e.target.value);
+                    onChange={(e) => {
+                        onChange(e.target.value);
                     }}
+                    {...props}
                 />
             </div>
         </div>
