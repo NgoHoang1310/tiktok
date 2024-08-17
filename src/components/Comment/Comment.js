@@ -11,6 +11,7 @@ import CommentItem from './CommentItem/CommentItem';
 import Loading from '../PlaceHolder/Loading';
 import Error from '~/components/Error';
 import { LockIcon } from '~/components/Icons';
+import { useStore } from '~/hooks';
 
 import * as apiServices from '~/services';
 
@@ -20,6 +21,8 @@ const socket = io('http://localhost:8080', {
 });
 
 function Comment({ video }) {
+    const [state] = useStore();
+    const { isLogin, currentUser } = state;
     const [comments, setComments] = useState([]);
     const [replies, setReplies] = useState({});
     const [currentReplyId, setCurrentReplyId] = useState(null);
@@ -30,7 +33,11 @@ function Comment({ video }) {
 
     useEffect(() => {
         const fetchApi = async (video) => {
-            let res = await apiServices.getCommentsVideo(video?._id, { page: page, limit: 4 });
+            let res = await apiServices.getCommentsVideo(video?._id, {
+                page: page,
+                limit: 4,
+                userId: isLogin ? currentUser?._id : null,
+            });
             paginationComment.current = res?.pagination;
             setComments((prevComments) => {
                 if (prevVideoId.current === video?._id) {
@@ -83,6 +90,7 @@ function Comment({ video }) {
                 parentId: commentId,
                 page: page,
                 order: 'asc',
+                userId: isLogin ? currentUser?._id : null,
             });
             paginationReply.current = res?.pagination;
             setReplies((prevReplies) => {
@@ -138,12 +146,14 @@ function Comment({ video }) {
                                         commentator={comment.commentator}
                                         key={index}
                                         repliesCount={comment.repliesCount}
+                                        likesCount={comment.likesCount}
                                         content={comment.content}
                                         time={comment.createdAt}
                                         currentReplyId={currentReplyId}
                                         videoId={comment.videoId}
                                         ownerVideoId={video?.userId}
                                         replies={replies[comment._id]}
+                                        isLiked={comment.isLiked}
                                         showLoadReplies={showLoadReplies}
                                         showReplyEditor={currentReplyId === comment._id}
                                         onLoadReplies={handleLoadReplies}

@@ -19,9 +19,9 @@ import VideoProvider from '~/hoc/Provider/VideoProvider';
 const cx = classNames.bind(styles);
 function Home() {
     const [state] = useStore();
-    const { isLogin, isFullScreen, currentVideo, initialize } = state;
+    const { isLogin, isFullScreen, currentVideo } = state;
     const [videos, setVideos] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(Math.floor(1));
     const [loading, setLoading] = useState(true);
     const playVideoRef = useRef([]);
     const pagination = useRef({});
@@ -95,9 +95,9 @@ function Home() {
                             })
                         }
                         loader={
-                            <p style={{ textAlign: 'center', marginTop: 4 }}>
+                            <div style={{ textAlign: 'center', marginTop: 4 }}>
                                 <Loading style={{ mixBlendMode: 'darken' }} />
-                            </p>
+                            </div>
                         }
                         hasMore={pagination.current?.hasNextPage}
                         endMessage={

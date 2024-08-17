@@ -92,17 +92,19 @@ function Following() {
                             })
                         }
                         loader={
-                            <p style={{ textAlign: 'center', marginTop: 4 }}>
+                            <div style={{ textAlign: 'center', marginTop: 4 }}>
                                 <Loading style={{ mixBlendMode: 'darken' }} />
-                            </p>
+                            </div>
                         }
                         hasMore={pagination.current?.hasNextPage}
                         endMessage={
-                            <p style={{ textAlign: 'center' }}>
-                                <b>
-                                    Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                                </b>
-                            </p>
+                            !!videos.length && (
+                                <p style={{ textAlign: 'center' }}>
+                                    <b>
+                                        Bạn đã tải hết video <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                    </b>
+                                </p>
+                            )
                         }
                     >
                         {loading ? (
@@ -126,7 +128,7 @@ function Following() {
                             ))
                         )}
                     </InfiniteScroll>
-                    <FullscreenVideo followDisable={true} videos={videos} goBack={'/following'} />
+                    <FullscreenVideo followDisable={true} videos={[]} goBack={'/following'} />
                 </div>
             </div>
         </VideoProvider>

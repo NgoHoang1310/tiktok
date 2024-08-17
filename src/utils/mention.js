@@ -56,7 +56,8 @@ const detectMention = (editor, type) => {
 
 const slateToText = (editor) => {
     let hashtags = [];
-    let text = editor.children[0].children
+    let slate = editor.children[0];
+    let text = slate.children
         .map((child) => {
             if (child.type && child.type === 'hashtags') {
                 hashtags.push(child.character);
@@ -65,7 +66,7 @@ const slateToText = (editor) => {
             return child.text;
         })
         .join('');
-    return { text, hashtags };
+    return { text, hashtags, slate };
 };
 
 export { insertMention, withMentions, detectMention, slateToText };

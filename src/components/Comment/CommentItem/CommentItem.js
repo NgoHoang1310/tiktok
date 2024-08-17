@@ -2,14 +2,14 @@
 import classNames from 'classnames/bind';
 import styles from './CommentItem.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { memo, useCallback } from 'react';
+import { faChevronDown, faTimes, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { LightHeartIcon } from '~/components/Icons';
+import { memo, useCallback } from 'react';
 import moment from 'moment';
 import 'moment/locale/vi';
 import Image from '~/components/Image';
 import PostItem from '../PostItem';
-import { useStore } from '~/hooks';
+import { useStore, useReaction } from '~/hooks';
 import { actions } from '~/store';
 
 const defaultFn = () => {};
@@ -22,10 +22,12 @@ function CommentItem({
     time,
     content,
     repliesCount,
+    likesCount = 0,
     currentReplyId,
     videoId,
     ownerVideoId,
     isReply = false,
+    isLiked = false,
     showLoadReplies = true,
     showReplyEditor = false,
     replies = [],
@@ -34,6 +36,11 @@ function CommentItem({
 }) {
     const [state, dispatch] = useStore();
     const { currentUser, isLogin, showModal } = state;
+    const [reactions, reactionsCount, handleReactions] = useReaction(
+        comment,
+        { like: isLiked, favourite: false },
+        { like: likesCount, favourite: 0 },
+    );
 
     const handlePostReply = useCallback(async (result) => {
         if (result) {
@@ -67,11 +74,19 @@ function CommentItem({
                     </div>
                 </div>
                 <div className={cx('icon')}>
-                    <span></span>
-                    <span>
-                        <LightHeartIcon width="20px" height="20px" />
+                    <span onClick={() => handleReactions('like', 'Comment')}>
+                        {reactions?.like ? (
+                            <FontAwesomeIcon
+                                style={{ color: 'rgba(254, 44, 85, 1)' }}
+                                height={20}
+                                width={20}
+                                icon={faHeart}
+                            />
+                        ) : (
+                            <LightHeartIcon width={20} height={20} />
+                        )}
                     </span>
-                    <span>3</span>
+                    <span>{reactionsCount?.like}</span>
                 </div>
             </div>
             <div className={cx('reply-container')}>
@@ -99,12 +114,15 @@ function CommentItem({
                                 key={index}
                                 comment={reply._id}
                                 isReply={true}
+                                isLiked={reply.isLiked}
+                                likesCount={reply.likesCount}
                                 videoId={videoId}
+                                ownerVideoId={ownerVideoId}
                                 showReplyEditor={currentReplyId === reply._id}
                                 commentator={reply?.commentator}
                                 content={reply?.content}
                                 time={reply?.createdAt}
-                                replies={reply.replies}
+                                replies={[]}
                                 currentReplyId={comment}
                                 onShowReplyEditor={onShowReplyEditor}
                             />

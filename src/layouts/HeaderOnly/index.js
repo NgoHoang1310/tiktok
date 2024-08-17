@@ -2,10 +2,12 @@ import classNames from 'classnames/bind';
 import styles from './HeaderOnly.module.scss';
 import Header from '~/layouts/Components/Header';
 import Toast from '~/components/Toast';
+import { useScrollToTop } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
 function HeaderOnly({ children }) {
+    useScrollToTop();
     return (
         <div>
             <Header />

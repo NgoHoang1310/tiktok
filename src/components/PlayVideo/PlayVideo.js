@@ -9,7 +9,7 @@ import Video from './Video';
 import Interaction from '../Interaction';
 import Button from '../Button';
 
-import { useStore, useFollow } from '~/hooks';
+import { useStore, useFollow, useFullScreen } from '~/hooks';
 
 import { actions } from '~/store';
 import { Link } from 'react-router-dom';
@@ -19,13 +19,8 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
     const [follow, handleFollow] = useFollow(data?.userId, data?.userInfo?.isFollowing);
     const { currentUser, isFullScreen, currentVideo } = state;
     const videoRef = useRef();
+    const openFullscreen = useFullScreen();
 
-    const handleOpenFullscreen = useCallback(() => {
-        videoRef.current?.pause();
-        let currentTime = videoRef.current?.currentTime;
-        dispatch(actions.setCurrentVideo({ index: index, currentTime: currentTime }));
-        dispatch(actions.setFullscreen(true));
-    }, []);
     return (
         <div ref={ref} className={cx('wrapper')}>
             <Link to={`/@${data?.userInfo?.tiktokID}`}>
@@ -52,7 +47,11 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
                     <div className={cx('video')}>
                         <Video
                             videoId={data?._id}
-                            onClick={handleOpenFullscreen}
+                            onClick={() => {
+                                videoRef.current?.pause();
+                                let currentTime = videoRef.current?.currentTime;
+                                openFullscreen(index, currentTime);
+                            }}
                             ref={videoRef}
                             video={data?.filePath}
                             thumb={data?.thumbPath}
@@ -60,7 +59,14 @@ function PlayVideo({ index, data, followDisable = false }, ref) {
                             loop={true}
                         />
                     </div>
-                    <Interaction data={data} onOpenFullscreen={handleOpenFullscreen} />
+                    <Interaction
+                        data={data}
+                        onOpenFullscreen={() => {
+                            videoRef.current?.pause();
+                            let currentTime = videoRef.current?.currentTime;
+                            openFullscreen(index, currentTime);
+                        }}
+                    />
                 </div>
             </div>
         </div>

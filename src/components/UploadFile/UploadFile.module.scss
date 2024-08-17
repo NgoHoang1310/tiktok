@@ -93,6 +93,13 @@
     bottom: 12.5%;
     left: 14px;
     font-size: 1rem;
+    width: 220px;
+
+    p {
+        text-wrap: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
     span {
         display: block;
@@ -102,6 +109,7 @@
     }
 
     div {
+        width: inherit;
         margin-top: 4px;
         display: flex;
 
@@ -123,6 +131,18 @@
         border: 1px solid var(--boder-blur-color);
         padding: 10px 8px;
         border-radius: 5px;
+    }
+}
+
+.mention-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+
+    span {
+        color: var(--blur-color);
+        cursor: pointer;
     }
 }
 

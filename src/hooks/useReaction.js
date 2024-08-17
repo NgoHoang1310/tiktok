@@ -26,11 +26,11 @@ function useReaction(videoId, initial, count) {
         }
     }, [videoId]);
 
-    const handleReactions = async (type) => {
+    const handleReactions = async (type, reactableType) => {
         if (isLogin) {
             if (reactions[videoId][type]) {
                 await apiService.retrieveReaction({
-                    reactableType: 'Video',
+                    reactableType: reactableType,
                     reactableId: videoId,
                     reactionType: type,
                 });
@@ -42,7 +42,7 @@ function useReaction(videoId, initial, count) {
                 });
             } else {
                 await apiService.postReaction({
-                    reactableType: 'Video',
+                    reactableType: reactableType,
                     reactableId: videoId,
                     reactionType: type,
                 });

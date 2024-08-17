@@ -24,6 +24,7 @@ function FullscreenVideo({ videos = [], goBack, followDisable = false }) {
         videos[videoIndex]?.userInfo?._id,
         videos[videoIndex]?.userInfo?.isFollowing,
     );
+
     const videoRef = useRef();
     const navigate = useNavigate();
 

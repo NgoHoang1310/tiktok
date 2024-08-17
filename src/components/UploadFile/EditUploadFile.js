@@ -3,9 +3,9 @@ import classNames from 'classnames/bind';
 import styles from './UploadFile.module.scss';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faMusic, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faMusic, faCircleNotch, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { generateVideoThumbnails } from '@rajesh896/video-thumbnails-generator';
-import { Editor, Transforms, Range, createEditor } from 'slate';
+import { Transforms, Range, createEditor, Editor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, Editable, withReact } from 'slate-react';
 
@@ -478,10 +478,9 @@ function EditUploadFile({ data, onFile }) {
     const [frames, setFrames] = useState([]);
     const [videoThumb, setVideoThumb] = useState();
     const [hashtags, setHashtags] = useState([]);
+
     const editor = useMemo(() => withMentions(withReact(withHistory(createEditor()))), []);
     const renderElement = useCallback((props) => <MentionInput {...props} />, []);
-
-    // const chars = hashtags.filter((c) => c?.name.toLowerCase().startsWith(debounce?.toLowerCase())).slice(0, 10);
 
     useEffect(() => {
         generateVideoThumbnails(data, MAX_THUMBNAIL).then((frames) => {
@@ -545,6 +544,16 @@ function EditUploadFile({ data, onFile }) {
         }
     }, [debounce?.length, target]);
 
+    useLayoutEffect(() => {
+        const fetchApi = async () => {
+            let res = await apiService.getHashtags({ q: debounce });
+            setHashtags(res?.data);
+        };
+        debounce && fetchApi();
+    }, [debounce]);
+
+    useEffect(() => {});
+
     const handleCancel = () => {
         onFile('');
     };
@@ -595,13 +604,29 @@ function EditUploadFile({ data, onFile }) {
         setTarget(null);
     };
 
-    useLayoutEffect(() => {
-        const fetchApi = async () => {
-            let res = await apiService.getHashtags({ q: debounce });
-            setHashtags(res?.data);
-        };
-        debounce && fetchApi();
-    }, [debounce]);
+    const handleAddIconToEditor = () => {
+        const { slate } = slateToText(editor);
+
+        Transforms.delete(editor, {
+            at: {
+                anchor: Editor.start(editor, []),
+                focus: Editor.end(editor, []),
+            },
+        });
+
+        // Removes empty node
+        Transforms.removeNodes(editor, {
+            at: [0],
+        });
+
+        // Insert array of children nodes
+        Transforms.insertNodes(editor, [
+            {
+                type: 'paragraph',
+                children: [...slate.children, { text: '#' }],
+            },
+        ]);
+    };
 
     return (
         <Fragment>
@@ -615,7 +640,7 @@ function EditUploadFile({ data, onFile }) {
                         <div className={cx('mobile-preview')}>
                             <MobilePreview data={data} currentUser={currentUser} />
                             <div className={cx('mobile-video-info')}>
-                                <span>@{currentUser?.fullName}</span>
+                                <span>@{currentUser?.nickName}</span>
                                 <p dangerouslySetInnerHTML={{ __html: videoNote }}></p>
                                 <div>
                                     <FontAwesomeIcon icon={faMusic} />
@@ -654,6 +679,7 @@ function EditUploadFile({ data, onFile }) {
                                 className={cx('title-input')}
                                 style={{ outline: 'none' }}
                                 renderElement={renderElement}
+                                value={videoNote}
                             />
                             {target && debounce?.length > 0 && (
                                 <Mention ref={ref} data-cy="mentions-portal">
@@ -678,6 +704,9 @@ function EditUploadFile({ data, onFile }) {
                                 </Mention>
                             )}
                         </Slate>
+                        <div className={cx('mention-icon')}>
+                            <span onClick={handleAddIconToEditor}># Hashtag</span>
+                        </div>
                     </div>
                     <div className={cx('video-info')}>
                         <div className={cx('video-thumb')}>

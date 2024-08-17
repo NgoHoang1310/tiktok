@@ -1,12 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './Discover.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loading from '~/components/PlaceHolder/Loading';
-
 import Video from '~/components/PlayVideo/Video';
+import FullscreenVideo from '~/layouts/FullscreenVideo';
+import VideoProvider from '~/hoc/Provider/VideoProvider';
+
+import { useStore, useFullScreen } from '~/hooks';
+import { actions } from '~/store';
+
 import * as apiService from '~/services';
 
 const cx = classNames.bind(styles);
@@ -58,18 +63,21 @@ const CATEGORIES = [
 ];
 
 function Discover() {
+    const [state, dispatch] = useStore();
     const [videos, setVideos] = useState([]);
     const [showArrow, setShowArrow] = useState({ left: false, right: true });
     const [currentCategory, setCurrentCategory] = useState(CATEGORIES[0]);
     const [page, setPage] = useState(1);
     const categoryRef = useRef();
     const pagination = useRef({});
+    const openFullscreen = useFullScreen();
 
     const handleFilterByCategory = (category) => {
         setPage(1);
         setVideos([]);
         setCurrentCategory(category);
     };
+    // console.log(videos);
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -110,80 +118,87 @@ function Discover() {
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('content')}>
-                <InfiniteScroll
-                    style={{ overflow: 'initial' }}
-                    dataLength={videos.length}
-                    next={() =>
-                        setPage((prev) => {
-                            if (pagination.current?.hasNextPage) {
-                                return pagination.current?.nextPage;
-                            }
-                            return prev;
-                        })
-                    }
-                    hasMore={pagination.current?.hasNextPage}
-                    loader={
-                        <p style={{ textAlign: 'center', marginTop: 48 }}>
-                            <Loading style={{ mixBlendMode: 'darken' }} />
-                        </p>
-                    }
-                    endMessage={
-                        videos.length > 6 && (
-                            <p style={{ textAlign: 'center', marginTop: 48 }}>
-                                <b>Bạn đã tải hết video</b> <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                            </p>
-                        )
-                    }
-                >
-                    <div className={cx('video-category-container')}>
-                        {showArrow['left'] && (
-                            <button onClick={() => handleArrowClick('left')} className={cx('arrow', 'arrow-left')}>
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </button>
-                        )}
-                        <div ref={categoryRef} className={cx('video-category')}>
-                            {CATEGORIES.map((category, index) => (
-                                <button
-                                    onClick={() => handleFilterByCategory(category)}
-                                    key={index}
-                                    className={cx('category-item', { active: category === currentCategory })}
-                                >
-                                    {category.name}
+        <VideoProvider>
+            <div className={cx('wrapper')}>
+                <div className={cx('content')}>
+                    <InfiniteScroll
+                        style={{ overflow: 'initial' }}
+                        dataLength={videos.length}
+                        next={() =>
+                            setPage((prev) => {
+                                if (pagination.current?.hasNextPage) {
+                                    return pagination.current?.nextPage;
+                                }
+                                return prev;
+                            })
+                        }
+                        hasMore={pagination.current?.hasNextPage}
+                        loader={
+                            <div style={{ textAlign: 'center', marginTop: 48 }}>
+                                <Loading style={{ mixBlendMode: 'darken' }} />
+                            </div>
+                        }
+                        endMessage={
+                            videos.length > 6 && (
+                                <p style={{ textAlign: 'center', marginTop: 48 }}>
+                                    <b>Bạn đã tải hết video</b> <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                </p>
+                            )
+                        }
+                    >
+                        <div className={cx('video-category-container')}>
+                            {showArrow['left'] && (
+                                <button onClick={() => handleArrowClick('left')} className={cx('arrow', 'arrow-left')}>
+                                    <FontAwesomeIcon icon={faChevronLeft} />
                                 </button>
-                            ))}
+                            )}
+                            <div ref={categoryRef} className={cx('video-category')}>
+                                {CATEGORIES.map((category, index) => (
+                                    <button
+                                        onClick={() => handleFilterByCategory(category)}
+                                        key={index}
+                                        className={cx('category-item', { active: category === currentCategory })}
+                                    >
+                                        {category.name}
+                                    </button>
+                                ))}
+                            </div>
+                            {showArrow['right'] && (
+                                <button
+                                    onClick={() => handleArrowClick('right')}
+                                    className={cx('arrow', 'arrow-right')}
+                                >
+                                    <FontAwesomeIcon icon={faChevronRight} />
+                                </button>
+                            )}
                         </div>
-                        {showArrow['right'] && (
-                            <button onClick={() => handleArrowClick('right')} className={cx('arrow', 'arrow-right')}>
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </button>
-                        )}
-                    </div>
-                    <div className={cx('video-list')}>
-                        {videos?.map((video, index) => {
-                            return (
-                                <div key={index} className={cx('video-item')}>
-                                    <Video
-                                        muted
-                                        customControl={false}
-                                        className={cx('video')}
-                                        video={video?.filePath}
-                                        preload="metadata"
-                                        autoPlay={false}
-                                        views={video.viewsCount}
-                                    />
-                                    <p
-                                        className={cx('title')}
-                                        dangerouslySetInnerHTML={{ __html: video.description }}
-                                    ></p>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </InfiniteScroll>
+                        <div className={cx('video-list')}>
+                            {videos?.map((video, index) => {
+                                return (
+                                    <div key={index} className={cx('video-item')}>
+                                        <Video
+                                            muted
+                                            customControl={false}
+                                            className={cx('video')}
+                                            video={video?.filePath}
+                                            preload="metadata"
+                                            autoPlay={false}
+                                            views={video.viewsCount}
+                                            onClick={() => openFullscreen(index)}
+                                        />
+                                        <p
+                                            className={cx('title')}
+                                            dangerouslySetInnerHTML={{ __html: video.description }}
+                                        ></p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </InfiniteScroll>
+                    <FullscreenVideo videos={videos} goBack={'/discover'} />
+                </div>
             </div>
-        </div>
+        </VideoProvider>
     );
 }
 

@@ -19,7 +19,7 @@ function Interaction({ size = 'medium', data, className, direction = 'vertical',
         <div className={cx('wrapper', { [className]: className })} {...props}>
             <ul className={cx('list', direction)}>
                 <li className={cx('item')}>
-                    <div className={cx(size)} onClick={() => handleReactions('like')}>
+                    <div className={cx(size)} onClick={() => handleReactions('like', 'Video')}>
                         <FontAwesomeIcon className={cx('icon', { heartActive: reactions?.like })} icon={faHeart} />
                     </div>
                     <span>{reactionsCount?.like}</span>
@@ -31,7 +31,7 @@ function Interaction({ size = 'medium', data, className, direction = 'vertical',
                     <span>{data?.commentsCount}</span>
                 </li>
                 <li className={cx('item')}>
-                    <div className={cx(size)} onClick={() => handleReactions('favourite')}>
+                    <div className={cx(size)} onClick={() => handleReactions('favourite', 'Video')}>
                         <FontAwesomeIcon
                             className={cx('icon', { bookMarkActive: reactions?.favourite })}
                             icon={faBookmark}

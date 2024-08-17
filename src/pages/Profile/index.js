@@ -14,10 +14,10 @@ import Video from '~/components/PlayVideo/Video';
 import Error from '~/components/Error';
 import Loading from '~/components/PlaceHolder/Loading';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import * as apiService from '~/services';
-import { useStore } from '~/hooks';
+import { useStore, useFullScreen } from '~/hooks';
 import { actions } from '~/store';
 import VideoProvider from '~/hoc/Provider/VideoProvider';
 import FullscreenVideo from '~/layouts/FullscreenVideo';
@@ -25,8 +25,8 @@ import FullscreenVideo from '~/layouts/FullscreenVideo';
 const cx = classNames.bind(styles);
 const VIDEO_NAVS = ['video', 'favourite', 'like'];
 function Profile() {
-    const [state, dispatch] = useStore();
     let { tiktokID } = useParams();
+    const [state, dispatch] = useStore();
     const { isLogin, currentUser, showModal, currentVideo } = state;
     const navRef = useRef();
     const initialNav = useRef();
@@ -40,6 +40,8 @@ function Profile() {
     const [category, setCategory] = useState(VIDEO_NAVS[0]);
     const isMe = useRef(null);
     const pagination = useRef({});
+
+    const openFullscreen = useFullScreen();
 
     const updateLinePosition = (item) => {
         let line = navRef.current;
@@ -64,11 +66,6 @@ function Profile() {
         }
     };
 
-    const handleOpenFullscreen = useCallback((index) => {
-        dispatch(actions.setCurrentVideo({ ...currentVideo, index: index }));
-        dispatch(actions.setFullscreen(true));
-    }, []);
-
     useEffect(() => {
         const fetchApi = async () => {
             let res = await apiService.getUserProfile(tiktokID.split('@')[1]);
@@ -78,6 +75,10 @@ function Profile() {
             } else {
                 setEditable(false);
             }
+            setCategory('video');
+            updateLinePosition(initialNav.current);
+            setPage(1);
+            setVideos([]);
             setProfile(res);
         };
 
@@ -141,9 +142,9 @@ function Profile() {
                             });
                         }}
                         loader={
-                            <p style={{ textAlign: 'center', marginTop: 48 }}>
+                            <div style={{ textAlign: 'center', marginTop: 48 }}>
                                 <Loading style={{ mixBlendMode: 'darken' }} />
-                            </p>
+                            </div>
                         }
                         hasMore={pagination.current?.hasNextPage}
                         endMessage={
@@ -244,7 +245,7 @@ function Profile() {
                                                 <div key={index} className={cx('video-item')}>
                                                     <Video
                                                         views={video.viewsCount}
-                                                        onClick={() => handleOpenFullscreen(index)}
+                                                        onClick={() => openFullscreen(index)}
                                                         customControl={false}
                                                         className={cx('video')}
                                                         video={video.filePath}

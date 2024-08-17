@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 function DefaultLayout({ children }) {
     const [state, dispatch] = useContext(StoreContext);
     const { showModal } = state;
-    // useScrollToTop();
+    useScrollToTop();
     return (
         <div className={cx('wrapper')}>
             <Header />
