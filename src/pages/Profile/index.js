@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faCheck, faPhotoVideo } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody } from 'reactstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -66,7 +66,7 @@ function Profile() {
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchApi = async () => {
             let res = await apiService.getUserProfile(tiktokID.split('@')[1]);
 
@@ -85,7 +85,7 @@ function Profile() {
         fetchApi();
     }, [tiktokID, currentUser?._id]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         isMe.current = profile?._id === currentUser?._id;
         const fetchApi = async (userId, options) => {
             let res = await apiService.getVideosProfile(userId, options);
