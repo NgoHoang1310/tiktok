@@ -21,7 +21,7 @@ function Home() {
     const [state] = useStore();
     const { isLogin, isFullScreen, currentVideo } = state;
     const [videos, setVideos] = useState([]);
-    const [page, setPage] = useState(Math.floor(1));
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const playVideoRef = useRef([]);
     const pagination = useRef({});

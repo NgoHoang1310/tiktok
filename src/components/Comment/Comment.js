@@ -7,8 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { io } from 'socket.io-client';
 
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+
 import CommentItem from './CommentItem/CommentItem';
-import Loading from '../PlaceHolder/Loading';
 import Error from '~/components/Error';
 import { LockIcon } from '~/components/Icons';
 import { useStore } from '~/hooks';
@@ -27,12 +29,14 @@ function Comment({ video }) {
     const [replies, setReplies] = useState({});
     const [currentReplyId, setCurrentReplyId] = useState(null);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
     const paginationComment = useRef({});
     const paginationReply = useRef({});
     const prevVideoId = useRef(null);
 
     useEffect(() => {
         const fetchApi = async (video) => {
+            setLoading(true);
             let res = await apiServices.getCommentsVideo(video?._id, {
                 page: page,
                 limit: 4,
@@ -47,6 +51,7 @@ function Comment({ video }) {
                 setPage(1);
                 return [...res?.data];
             });
+            setLoading(false);
         };
 
         video?._id && fetchApi(video);
@@ -130,37 +135,49 @@ function Comment({ video }) {
                         hasMore={paginationComment.current?.hasNextPage}
                         scrollableTarget="scrollableComment"
                         endMessage={
-                            <p style={{ textAlign: 'center' }}>
-                                <b>
-                                    Bạn đã tải hết bình luận <FontAwesomeIcon color="#58ca50" icon={faCheck} />
-                                </b>
-                            </p>
+                            !loading && (
+                                <p style={{ textAlign: 'center' }}>
+                                    <b>
+                                        Bạn đã tải hết bình luận <FontAwesomeIcon color="#58ca50" icon={faCheck} />
+                                    </b>
+                                </p>
+                            )
                         }
                     >
                         <div className={cx('comment-lists')}>
-                            {comments.map((comment, index) => {
-                                const showLoadReplies = comment.repliesCount !== replies[comment._id]?.length;
-                                return (
-                                    <CommentItem
-                                        comment={comment._id}
-                                        commentator={comment.commentator}
-                                        key={index}
-                                        repliesCount={comment.repliesCount}
-                                        likesCount={comment.likesCount}
-                                        content={comment.content}
-                                        time={comment.createdAt}
-                                        currentReplyId={currentReplyId}
-                                        videoId={comment.videoId}
-                                        ownerVideoId={video?.userId}
-                                        replies={replies[comment._id]}
-                                        isLiked={comment.isLiked}
-                                        showLoadReplies={showLoadReplies}
-                                        showReplyEditor={currentReplyId === comment._id}
-                                        onLoadReplies={handleLoadReplies}
-                                        onShowReplyEditor={handleShowReplyEditor}
-                                    />
-                                );
-                            })}
+                            {!loading ? (
+                                comments.map((comment, index) => {
+                                    const showLoadReplies = comment.repliesCount !== replies[comment._id]?.length;
+                                    return (
+                                        <CommentItem
+                                            comment={comment._id}
+                                            commentator={comment.commentator}
+                                            key={index}
+                                            repliesCount={comment.repliesCount}
+                                            likesCount={comment.likesCount}
+                                            content={comment.content}
+                                            time={comment.createdAt}
+                                            currentReplyId={currentReplyId}
+                                            videoId={comment.videoId}
+                                            ownerVideoId={video?.userId}
+                                            replies={replies[comment._id]}
+                                            isLiked={comment.isLiked}
+                                            showLoadReplies={showLoadReplies}
+                                            showReplyEditor={currentReplyId === comment._id}
+                                            onLoadReplies={handleLoadReplies}
+                                            onShowReplyEditor={handleShowReplyEditor}
+                                        />
+                                    );
+                                })
+                            ) : (
+                                <Box sx={{ width: '60%', display: 'flex', padding: '10px 0' }}>
+                                    <Skeleton variant="circular" width={50} height={50} />
+                                    <Box sx={{ flex: 1, margin: '0 8px' }}>
+                                        <Skeleton animation="wave" />
+                                        <Skeleton animation="wave" />
+                                    </Box>
+                                </Box>
+                            )}
                         </div>
                     </InfiniteScroll>
                 ) : (

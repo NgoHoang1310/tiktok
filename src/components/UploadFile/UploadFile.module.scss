@@ -1,6 +1,6 @@
 .wrapper {
     width: 1080px;
-    height: 100%;
+    height: calc(100% - 20px);
     padding: 52px 50px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);

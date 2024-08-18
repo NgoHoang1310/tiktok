@@ -21,7 +21,7 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     const volumeRef = useRef();
     const preVolume = useRef(50);
     const [state, dispatch] = useStore();
-    const { isAutoScroll, isMute, volume, currentVideo, isFullScreen } = state;
+    const { isAutoScroll, isMute, volume } = state;
     const [play, setPlay] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -98,15 +98,12 @@ function ControlVideo({ videoId, videoRef, onLoading }) {
     useEffect(() => {
         const element = videoRef.current;
         const handleWaiting = () => {
-            console.log('waiting');
-
             setVideoReady(false);
             onLoading(true);
         };
         const handleVideoCanplay = () => {
-            console.log('canplay');
-
             setVideoReady(true);
+            setPlay(true);
             onLoading(false);
         };
 

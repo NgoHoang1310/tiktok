@@ -682,7 +682,7 @@ function EditUploadFile({ data, onFile }) {
                                 value={videoNote}
                             />
                             {target && debounce?.length > 0 && (
-                                <Mention ref={ref} data-cy="mentions-portal">
+                                <Mention style={{ maxHeight: 300 }} ref={ref} data-cy="mentions-portal">
                                     {hashtags.length > 0 ? (
                                         hashtags.map((_hashtag, _index) => (
                                             <MentionItem

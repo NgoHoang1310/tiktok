@@ -27,12 +27,13 @@ const VIDEO_NAVS = ['video', 'favourite', 'like'];
 function Profile() {
     let { tiktokID } = useParams();
     const [state, dispatch] = useStore();
-    const { isLogin, currentUser, showModal, currentVideo } = state;
+    const { isLogin, currentUser, showModal } = state;
     const navRef = useRef();
     const initialNav = useRef();
     const [lineActive, setLineActive] = useState('video');
     const [profile, setProfile] = useState({});
     const [editable, setEditable] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState(false);
     const [videos, setVideos] = useState([]);
     const [page, setPage] = useState(1);
@@ -68,6 +69,7 @@ function Profile() {
 
     useLayoutEffect(() => {
         const fetchApi = async () => {
+            setLoading(true);
             let res = await apiService.getUserProfile(tiktokID.split('@')[1]);
 
             if (res?._id === currentUser?._id) {
@@ -80,6 +82,7 @@ function Profile() {
             setPage(1);
             setVideos([]);
             setProfile(res);
+            setLoading(false);
         };
 
         fetchApi();
@@ -88,9 +91,11 @@ function Profile() {
     useLayoutEffect(() => {
         isMe.current = profile?._id === currentUser?._id;
         const fetchApi = async (userId, options) => {
+            setLoading(true);
             let res = await apiService.getVideosProfile(userId, options);
             pagination.current = res.pagination;
             setVideos((prev) => [...prev, ...res.data]);
+            setLoading(false);
         };
         switch (category) {
             case 'like': {
@@ -261,6 +266,8 @@ function Profile() {
                                             );
                                         })}
                                     </div>
+                                ) : loading ? (
+                                    <Loading style={{ mixBlendMode: 'darken', marginTop: 100 }} />
                                 ) : (
                                     <Error icon={<UserIcon width="90px" height="90px" />} title={'Chưa có video nào'} />
                                 )
