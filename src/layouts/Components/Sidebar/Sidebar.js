@@ -36,7 +36,7 @@ function Sidebar() {
         let page = 1;
         setLoading(true);
         if (paginationFollowing.current.hasNextPage) page = paginationFollowing.current.nextPage;
-        const res = await apiService.getFollowingUsers(currentUser?._id, { page: page, limit: 1 });
+        const res = await apiService.getFollowingUsers(currentUser?._id, { page: page, limit: 3 });
         paginationFollowing.current = res?.pagination;
         setFollowing((prev) => {
             return [...prev, ...res?.data];

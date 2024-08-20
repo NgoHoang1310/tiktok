@@ -84,7 +84,6 @@ function Discover() {
             let res = await apiService.getDiscoverVideos({
                 page: page,
                 limit: 6,
-                sort: 'viewsCount',
                 category: currentCategory ? JSON.stringify(currentCategory.keyword) : null,
             });
             pagination.current = res.pagination;
