@@ -18,7 +18,7 @@ import { useStore } from '~/hooks';
 import * as apiServices from '~/services';
 
 const cx = classNames.bind(styles);
-const socket = io('http://localhost:8080', {
+const socket = io(process.env.WEBSOCKET_URL, {
     transports: ['websocket'],
 });
 
