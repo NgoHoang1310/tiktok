@@ -18,7 +18,7 @@ import { useStore } from '~/hooks';
 import * as apiServices from '~/services';
 
 const cx = classNames.bind(styles);
-const socket = io(process.env.WEBSOCKET_URL, {
+const socket = io('https://tiktok-be-2jqn.onrender.com', {
     transports: ['websocket'],
 });
 
